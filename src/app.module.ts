@@ -3,6 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
+import { ProductModule } from './product/product.module';
+import { ShopModule } from './shop/shop.module';
+import { OrderModule } from './order/order.module';
+import { OrderlineModule } from './orderline/orderline.module';
+import { InventoryModule } from './inventory/inventory.module';
+import { BillingDetailsModule } from './billing-details/billing-details.module';
 
 @Module({
   imports: [
@@ -18,6 +24,12 @@ import { UserModule } from './user/user.module';
       autoLoadEntities: true,
     }),
     UserModule,
+    ProductModule,
+    ShopModule,
+    OrderModule,
+    OrderlineModule,
+    InventoryModule,
+    BillingDetailsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
