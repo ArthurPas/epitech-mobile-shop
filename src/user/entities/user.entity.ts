@@ -1,33 +1,30 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BillingDetail } from 'src/billing-details/entities/billing-detail.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
-  /**
-   * this decorator will help to auto generate id for the table.
-   */
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 30 })
-  name: string;
+  @Column({ type: 'varchar', length: 20 })
+  first_name: string;
 
-  @Column({ type: 'varchar', length: 15 })
-  username: string;
+  @Column({ type: 'varchar', length: 20 })
+  last_name: string;
 
   @Column({ type: 'varchar', length: 40 })
   email: string;
 
-  @Column({ type: 'int' })
-  age: number;
-
   @Column({ type: 'varchar' })
   password: string;
 
-  @Column({ type: 'enum', enum: ['m', 'f', 'u'] })
-  /**
-   * m - male
-   * f - female
-   * u - unspecified
-   */
-  gender: string;
+  @ManyToOne(() => BillingDetail, (billing) => billing.user)
+  @JoinColumn({ name: 'billing_id' })
+  billing: BillingDetail;
 }

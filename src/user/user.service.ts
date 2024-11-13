@@ -23,12 +23,13 @@ export class UserService {
    */
   createUser(createUserDto: CreateUserDto): Promise<User> {
     const user: User = new User();
-    user.name = createUserDto.name;
-    user.age = createUserDto.age;
+    //TODO: update this with new user entity
+    // user.name = createUserDto.name;
+    // user.age = createUserDto.age;
     user.email = createUserDto.email;
-    user.username = createUserDto.username;
+    // user.username = createUserDto.username;
     user.password = createUserDto.password;
-    user.gender = createUserDto.gender;
+    // user.gender = createUserDto.gender;
     return this.userRepository.save(user);
   }
 
@@ -58,10 +59,11 @@ export class UserService {
    */
   updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user: User = new User();
-    user.name = updateUserDto.name;
-    user.age = updateUserDto.age;
+    //TODO: update this with new user entity
+    // user.name = updateUserDto.name;
+    // user.age = updateUserDto.age;
     user.email = updateUserDto.email;
-    user.username = updateUserDto.username;
+    // user.username = updateUserDto.username;
     user.password = updateUserDto.password;
     user.id = id;
     return this.userRepository.save(user);
