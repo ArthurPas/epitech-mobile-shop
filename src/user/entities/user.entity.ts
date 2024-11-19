@@ -24,6 +24,9 @@ export class User {
   @Column({ type: 'varchar' })
   password: string;
 
+  @Column({ type: 'boolean' })
+  isAdmin: boolean;
+
   @ManyToOne(() => BillingDetail, (billing) => billing.user)
   @JoinColumn({ name: 'billing_id' })
   billing: BillingDetail;
