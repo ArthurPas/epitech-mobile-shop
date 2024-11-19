@@ -3,6 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/jwt-auth.gard';
 import { ProductModule } from './product/product.module';
 import { ShopModule } from './shop/shop.module';
 import { OrderModule } from './order/order.module';
@@ -24,6 +27,7 @@ import { BillingDetailsModule } from './billing-details/billing-details.module';
       autoLoadEntities: true,
     }),
     UserModule,
+    AuthModule,
     ProductModule,
     ShopModule,
     OrderModule,
@@ -31,7 +35,14 @@ import { BillingDetailsModule } from './billing-details/billing-details.module';
     InventoryModule,
     BillingDetailsModule,
   ],
+
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}
