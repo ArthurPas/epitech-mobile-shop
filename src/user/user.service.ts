@@ -1,9 +1,11 @@
+import * as bcrypt from 'bcrypt';
+import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+
+import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -15,19 +17,25 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
+  private async hash(password: string) {
+    const salt = await bcrypt.genSalt();
+
+    return await bcrypt.hash(password, salt);
+  }
+
   /**
    * this is function is used to create User in User Entity.
    * @param createUserDto this will type of createUserDto in which
    * we have defined what are the keys we are expecting from body
    * @returns promise of user
    */
-  createUser(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
     const user: User = new User();
     user.name = createUserDto.name;
     user.age = createUserDto.age;
     user.email = createUserDto.email;
     user.username = createUserDto.username;
-    user.password = createUserDto.password;
+    user.password = await this.hash(createUserDto.password);
     user.gender = createUserDto.gender;
     return this.userRepository.save(user);
   }
@@ -38,6 +46,14 @@ export class UserService {
    */
   findAllUser(): Promise<User[]> {
     return this.userRepository.find();
+  }
+
+  /**
+   * this function is used to get one user by its username
+   * @returns promise of of a user
+   */
+  findOne(username: string): Promise<User> {
+    return this.userRepository.findOneBy({ username });
   }
 
   /**
