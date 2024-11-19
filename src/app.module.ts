@@ -6,6 +6,12 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.gard';
+import { ProductModule } from './product/product.module';
+import { ShopModule } from './shop/shop.module';
+import { OrderModule } from './order/order.module';
+import { OrderlineModule } from './orderline/orderline.module';
+import { InventoryModule } from './inventory/inventory.module';
+import { BillingDetailsModule } from './billing-details/billing-details.module';
 
 @Module({
   imports: [
@@ -22,6 +28,12 @@ import { JwtAuthGuard } from './auth/jwt-auth.gard';
     }),
     UserModule,
     AuthModule,
+    ProductModule,
+    ShopModule,
+    OrderModule,
+    OrderlineModule,
+    InventoryModule,
+    BillingDetailsModule,
   ],
 
   controllers: [AppController],
