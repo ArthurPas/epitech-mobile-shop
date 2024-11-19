@@ -35,15 +35,9 @@ export class UserService {
     // user.name = createUserDto.name;
     // user.age = createUserDto.age;
     user.email = createUserDto.email;
-<<<<<<< HEAD
     user.username = createUserDto.username;
     user.password = await this.hash(createUserDto.password);
-    user.gender = createUserDto.gender;
-=======
-    // user.username = createUserDto.username;
-    user.password = createUserDto.password;
-    // user.gender = createUserDto.gender;
->>>>>>> origin/main
+
     return this.userRepository.save(user);
   }
 
