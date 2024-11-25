@@ -1,26 +1,39 @@
 import { Injectable } from '@nestjs/common';
 import { CreateOrderlineDto } from './dto/create-orderline.dto';
 import { UpdateOrderlineDto } from './dto/update-orderline.dto';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Orderline } from 'src/orderline/entities/orderline.entity';
 
 @Injectable()
 export class OrderlineService {
-  create(createOrderlineDto: CreateOrderlineDto) {
-    return 'This action adds a new orderline';
+  constructor(
+    @InjectRepository(Orderline)
+    private readonly orderlineRepository: Repository<Orderline>,
+  ) {}
+
+  async create(createOrderlineDto: CreateOrderlineDto): Promise<Orderline> {
+    const orderline = this.orderlineRepository.create(createOrderlineDto);
+    return this.orderlineRepository.save(orderline);
   }
 
-  findAll() {
-    return `This action returns all orderline`;
+  async findAll(): Promise<Orderline[]> {
+    return this.orderlineRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} orderline`;
+  async findOne(id: number): Promise<Orderline | undefined> {
+    return this.orderlineRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateOrderlineDto: UpdateOrderlineDto) {
-    return `This action updates a #${id} orderline`;
+  async update(
+    id: number,
+    updateOrderlineDto: UpdateOrderlineDto,
+  ): Promise<Orderline | undefined> {
+    await this.orderlineRepository.update(id, updateOrderlineDto);
+    return this.orderlineRepository.findOne({ where: { id } });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} orderline`;
+  async remove(id: number): Promise<void> {
+    await this.orderlineRepository.delete(id);
   }
 }
