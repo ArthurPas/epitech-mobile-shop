@@ -58,3 +58,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # postgres
 pgdata
+
+# script de lancement
+docker-dev.sh
