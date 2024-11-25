@@ -35,10 +35,15 @@ export class UserService {
     // user.name = createUserDto.name;
     // user.age = createUserDto.age;
     user.email = createUserDto.email;
+    user.first_name = createUserDto.first_name;
+    user.last_name = createUserDto.last_name;
     user.username = createUserDto.username;
     user.password = await this.hash(createUserDto.password);
 
-    return this.userRepository.save(user);
+    const newUser = await this.userRepository.save(user);
+    delete newUser.password;
+    delete newUser.isAdmin;
+    return newUser;
   }
 
   /**

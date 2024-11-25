@@ -19,10 +19,7 @@ export class UserController {
   @Public()
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    const newUser = await this.userService.createUser(createUserDto);
-    delete newUser.password;
-
-    return newUser;
+    return this.userService.createUser(createUserDto);
   }
 
   @Get()

@@ -9,6 +9,7 @@ async function bootstrap() {
     .setDescription('Trinity API')
     .setVersion('1.0')
     .addTag('trinity')
+    .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
