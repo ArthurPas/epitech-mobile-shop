@@ -1,0 +1,19 @@
+# Ce dockefile est utilisé pour le développement. 
+# On peut y ajouter le hot-reloading pour la rapidité et le confort
+# Peut utiliser les montages de volumes pour synchroniser les modifs en la machine et le container afin d'éviter de rebuild l'image
+
+FROM node:23
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm install -g @nestjs/cli
+
+EXPOSE 3000
+
+CMD [ "npm", "run", "start:dev" ]

@@ -1,0 +1,78 @@
+stages:
+  - lint
+  - test
+  - build
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+  POSTGRES_USER: ${PG_USER}
+  POSTGRES_PASSWORD: ${PG_PASSWORD}
+  POSTGRES_DB: ${PG_DB}
+
+
+# Linting de l'app
+lint:
+  stage: lint
+  image: node:23
+  script:
+    -npm ci
+    -npm run lint
+  only:
+    - merge_requests
+    - main
+  tags:
+    - docker
+
+# Tests de l'app avec la db
+test:
+  stage: test
+  image: node:23
+  services:
+    - name: postgres:16
+      alias: db
+  # Variables à revoir une fois la db en place
+  variables:
+    POSTGRES_USER: ${PG_USER}
+    POSTGRES_PASSWORD: ${PG_PASSWORD}
+    POSTGRES_DB: ${PG_DB}
+    DATABASE_URL: postgres://${PG_USER}:${PG_PASSWORD}@db:5432/${PG_DB}
+  script:
+    - npm ci
+    - npm run test
+  only:
+    - merge_requests
+    - main
+  tags:
+    - docker
+
+# Build de l'app
+build:
+  stage: build
+  image: node:23
+  script:
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - main
+  tags:
+    - docker
+
+# Déploiement de l'app
+deploy:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTER_USER --password-stdin $CI_REGISTRY
+  script:
+    -docker build -f Dockerfile.prod -t $CI_REGISTRY_IMAGE:latest .
+    -docker push $CI_REGISTRY_IMAGE:latest
+  only:
+    - main
+  tags:
+    - docker

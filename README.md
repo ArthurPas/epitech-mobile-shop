@@ -97,3 +97,26 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+
+## Avec Doppler
+
+Pour lancer en dev (comprend le .env.local)
+```bash
+$ ./docker-dev.sh up
+```
+
+Pour lancer en prod
+```bash
+$ ./docker-prod.sh up
+```
+
+Pour down en prod
+```bash
+$ doppler run --config prd -- docker-compose down
+```
+
+Pour checker les variables injectées par Doppler
+```bash
+$ doppler run -- printenv
+```
