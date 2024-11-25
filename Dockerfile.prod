@@ -2,7 +2,7 @@
 # Performance et sécurité en prio.
 # Pas de montage de volume pour éviter les modifications en direct
 
-FROM node:23 AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
