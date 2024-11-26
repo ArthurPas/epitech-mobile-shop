@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { CreateInventoryDto } from './dto/create-inventory.dto';
 import { UpdateInventoryDto } from './dto/update-inventory.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Inventory } from 'src/inventory/entities/inventory.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class InventoryService {
-  create(createInventoryDto: CreateInventoryDto) {
-    return 'This action adds a new inventory';
+  constructor(
+    @InjectRepository(Inventory)
+    private readonly inventoryRepository: Repository<Inventory>,
+  ) {}
+
+  async create(createInventoryDto: CreateInventoryDto) {
+    const inventory = this.inventoryRepository.create(createInventoryDto);
+    return this.inventoryRepository.save(inventory);
   }
 
-  findAll() {
-    return `This action returns all inventory`;
+  async findAll() {
+    return this.inventoryRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} inventory`;
+  async findOne(id: number) {
+    return this.inventoryRepository.findOne({ where: { id: id.toString() } });
   }
 
-  update(id: number, updateInventoryDto: UpdateInventoryDto) {
-    return `This action updates a #${id} inventory`;
+  async update(id: number, updateInventoryDto: UpdateInventoryDto) {
+    await this.inventoryRepository.update(id, updateInventoryDto);
+    return this.inventoryRepository.findOne({ where: { id: id.toString() } });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} inventory`;
+  async remove(id: number) {
+    await this.inventoryRepository.delete(id);
   }
 }
