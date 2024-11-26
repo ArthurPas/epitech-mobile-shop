@@ -6,14 +6,21 @@ FROM node:23
 
 WORKDIR /app
 
+# Copier les fichiers de configuration et installer les dépendances
 COPY package*.json ./
-
 RUN npm install
 
+# Copier tout le code source
 COPY . .
 
+# Installer NestJS CLI globalement (utile pour le développement)
 RUN npm install -g @nestjs/cli
 
+# Compiler le code TypeScript en JavaScript dans le dossier dist
+RUN npm run build
+
+# Exposer le port sur lequel l'application sera lancée
 EXPOSE 3000
 
+# Démarrer le serveur en mode développement
 CMD [ "npm", "run", "start:dev" ]

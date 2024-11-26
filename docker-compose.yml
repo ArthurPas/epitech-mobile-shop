@@ -21,7 +21,7 @@ services:
     build:
       context: .
       dockerfile: ${DOCKERFILE}
-    container_name: nest-docker-postgres
+    container_name: nest
     ports:
       - '3000:3000'
     environment:
@@ -46,7 +46,7 @@ services:
       - monitoring
     privileged: true
 
-  # pour tester prometheus
+  # pour tester prometheus (à retirer plus tard)
   node-exporter:
     container_name: node-exporter
     image: prom/node-exporter
