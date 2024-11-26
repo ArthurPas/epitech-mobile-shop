@@ -46,7 +46,7 @@ services:
       - monitoring
     privileged: true
 
-  # pour tester prometheus
+  # pour tester prometheus (à retirer plus tard)
   node-exporter:
     container_name: node-exporter
     image: prom/node-exporter
