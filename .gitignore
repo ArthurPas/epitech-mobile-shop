@@ -62,14 +62,6 @@ pgdata
 # script de lancement
 docker-dev.sh
 docker-prod.sh
-local-test.sh
-./scripts/push-image.sh
-./scripts/snyk.sh
-./scripts/zap_scan.sh
-scripts/local-test.sh
-scripts/push-image.sh
-scripts/snyk.sh
-scripts/zap_scan.sh
 snyk_report_summary.txt
 alerts.json
 sonar-project.properties
