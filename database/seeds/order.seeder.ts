@@ -29,7 +29,6 @@ export default class OrderSeeder implements Seeder {
     onGoingOrder.creation_date = new Date();
     onGoingOrder.is_paid = false;
     onGoingOrder.total_price = 0;
-    s;
 
     await repository.insert([paidOrder, onGoingOrder]);
   }
