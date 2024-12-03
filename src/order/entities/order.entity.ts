@@ -21,7 +21,7 @@ export class Order {
   @Column()
   creation_date: Date;
 
-  @Column()
+  @Column({ nullable: true })
   payment_date: Date;
 
   @Column()

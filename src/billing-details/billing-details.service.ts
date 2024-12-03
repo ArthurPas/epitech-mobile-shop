@@ -2,39 +2,39 @@ import { Injectable } from '@nestjs/common';
 import { CreateBillingDetailDto } from './dto/create-billing-detail.dto';
 import { UpdateBillingDetailDto } from './dto/update-billing-detail.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BillingDetail } from 'src/billing-details/entities/billing-detail.entity';
+import { BillingDetail } from './entities/billing-detail.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class BillingDetailsService {
   constructor(
     @InjectRepository(BillingDetail)
-    private readonly billingDetailRepository: Repository<BillingDetail>,
+    private readonly billingDetailsRepository: Repository<BillingDetail>,
   ) {}
 
   async create(createBillingDetailDto: CreateBillingDetailDto) {
-    const billingDetail = this.billingDetailRepository.create(
+    const billingDetail = this.billingDetailsRepository.create(
       createBillingDetailDto,
     );
-    return this.billingDetailRepository.save(billingDetail);
+    return this.billingDetailsRepository.save(billingDetail);
   }
 
-  async findAll() {
-    return this.billingDetailRepository.find();
+  findAll() {
+    return this.billingDetailsRepository.find();
   }
 
   async findOne(id: number) {
-    return this.billingDetailRepository.findOne({
+    return this.billingDetailsRepository.findOne({
       where: { id },
     });
   }
 
   async update(id: number, updateBillingDetailDto: UpdateBillingDetailDto) {
-    await this.billingDetailRepository.update(id, updateBillingDetailDto);
-    return this.billingDetailRepository.findOne({ where: { id } });
+    await this.billingDetailsRepository.update(id, updateBillingDetailDto);
+    return this.billingDetailsRepository.findOne({ where: { id } });
   }
 
   async remove(id: number) {
-    await this.billingDetailRepository.delete(id);
+    await this.billingDetailsRepository.delete(id);
   }
 }
