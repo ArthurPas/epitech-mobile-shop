@@ -5,7 +5,7 @@ export class CreateProductDto {
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
-  open_food_fact_id: number;
+  open_food_fact_id: string;
 
   @ApiProperty()
   @IsNumber()

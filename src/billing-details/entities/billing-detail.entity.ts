@@ -1,9 +1,10 @@
+import { Order } from 'src/order/entities/order.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -28,6 +29,8 @@ export class BillingDetail {
   country: string;
 
   @ManyToOne(() => User, (user) => user.billing)
-  @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToMany(() => Order, (order) => order.billing)
+  order: Order[];
 }

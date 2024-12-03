@@ -1,15 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBillingDetailDto } from './dto/create-billing-detail.dto';
 import { UpdateBillingDetailDto } from './dto/update-billing-detail.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { BillingDetail } from './entities/billing-detail.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class BillingDetailsService {
+  constructor(
+    @InjectRepository(BillingDetail)
+    private readonly billingDetailsRepository: Repository<BillingDetail>,
+  ) {}
+
   create(createBillingDetailDto: CreateBillingDetailDto) {
     return 'This action adds a new billingDetail';
   }
 
   findAll() {
-    return `This action returns all billingDetails`;
+    return this.billingDetailsRepository.find();
   }
 
   findOne(id: number) {
