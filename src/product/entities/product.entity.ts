@@ -1,11 +1,5 @@
-import { Shop } from 'src/shop/entities/shop.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Inventory } from 'src/inventory/entities/inventory.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Product {
@@ -13,9 +7,8 @@ export class Product {
   id: number;
 
   @Column()
-  open_food_fact_id: number;
+  open_food_fact_id: string;
 
-  @ManyToOne(() => Shop)
-  @JoinColumn({ name: 'shop_id' })
-  shop: Shop;
+  @OneToMany(() => Inventory, (inventory) => inventory.product)
+  inventory: Inventory[];
 }

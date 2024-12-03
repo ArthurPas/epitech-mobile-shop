@@ -42,7 +42,7 @@ export class UserService {
 
     const newUser = await this.userRepository.save(user);
     delete newUser.password;
-    delete newUser.isAdmin;
+    delete newUser.role;
     return newUser;
   }
 
