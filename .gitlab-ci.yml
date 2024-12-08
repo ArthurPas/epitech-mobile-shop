@@ -1,0 +1,77 @@
+stages:
+  - lint
+  - test
+  - build
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+  COMPOSE_PROJECT_NAME: gitlab_ci
+
+lint:
+  stage: lint
+  image: node:23
+  before_script:
+    - doppler run -- npm ci
+  script:
+    - npm run lint
+  only:
+    - merge_requests
+    - main
+  tags:
+    - docker
+
+test:
+  stage: test
+  image: node:23
+  services:
+    - name: postgres:16
+      alias: db
+  variables:
+    DATABASE_URL: postgres://$PG_USER:$PG_PASSWORD@db:5432/$PG_DB
+  before_script:
+    - doppler run -- docker-compose up -d db
+    - sleep 10
+    - docker-compose ps
+  script:
+    - doppler run -- npm ci
+    - doppler run -- npm run test
+  after_script:
+    - docker-compose down -v
+  only:
+    - merge_requests
+    - main
+  tags:
+    - docker
+
+build:
+  stage: build
+  image: node:23
+  before_script:
+    - doppler run -- npm ci
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - main
+  tags:
+    - docker
+
+deploy:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - doppler run -- docker-compose build app
+  script:
+    - doppler run -- docker-compose up -d
+  after_script:
+    - docker-compose down
+  only:
+    - main
+  tags:
+    - docker
