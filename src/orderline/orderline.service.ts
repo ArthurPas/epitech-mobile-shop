@@ -3,7 +3,7 @@ import { CreateOrderlineDto } from './dto/create-orderline.dto';
 import { UpdateOrderlineDto } from './dto/update-orderline.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Orderline } from 'src/orderline/entities/orderline.entity';
+import { Orderline } from './entities/orderline.entity';
 
 @Injectable()
 export class OrderlineService {
