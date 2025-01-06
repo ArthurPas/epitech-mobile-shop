@@ -33,6 +33,7 @@ export class Order {
 
   @ManyToOne(() => BillingDetail)
   @JoinColumn({ name: 'billing_id' })
+  @Column({ nullable: true })
   billing: BillingDetail;
 
   @OneToMany(() => Orderline, (orderline) => orderline.order)
