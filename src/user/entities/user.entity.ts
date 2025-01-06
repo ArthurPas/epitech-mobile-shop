@@ -1,5 +1,5 @@
-import { BillingDetail } from 'src/billing-details/entities/billing-detail.entity';
-import { Order } from 'src/order/entities/order.entity';
+import { BillingDetail } from '../../billing-details/entities/billing-detail.entity';
+import { Order } from '../../order/entities/order.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum UserRole {
