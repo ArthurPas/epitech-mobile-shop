@@ -98,6 +98,42 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
+## Makefile
+Voici les commandes nécessaires :
+
+- Lancer le docker en dev
+```bash
+make dev
+```
+- Lancer le docker en prod
+```bash
+make prd
+```
+- Arrêter le docker-compose
+```bash
+make stop
+```
+- Totalement clean les containers, volumes et images inutilisés
+```bash
+make clean
+```
+
+Pour le DevSecOps (utilise un environnement doppler personnel):
+- push les images docker
+```bash
+make push
+```
+
+- Lancer Snyk
+```bash
+make scan
+```
+
+- Lancer ZAP
+```bash
+make zap
+```
+
 
 ## Avec Doppler
 
