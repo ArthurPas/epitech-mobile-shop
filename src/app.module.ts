@@ -23,7 +23,7 @@ import { BillingDetailsModule } from './billing-details/billing-details.module';
       password: 'postgres',
       database: 'postgres',
       entities: [__dirname + '/**/*.entity.ts'],
-      synchronize: true,
+      synchronize: true, //TODO: Remember to remove this for production
       autoLoadEntities: true,
     }),
     UserModule,
