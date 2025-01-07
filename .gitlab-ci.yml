@@ -26,28 +26,30 @@ lint:
 
 test:
   stage: test
-  image: docker:24.0.5  # Version récente de Docker avec Compose V2 inclus
+  image: docker:24.0.5
   services:
+    - name: docker:24.0.5-dind  # Docker in Docker
     - name: postgres:16
       alias: db
   variables:
-    DOCKER_HOST: tcp://docker:2375  # Assurez-vous que Docker est bien configuré
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
     POSTGRES_USER: $PG_USER
     POSTGRES_PASSWORD: $PG_PASSWORD
     POSTGRES_DB: $PG_DB
   before_script:
-    - apk add --no-cache curl bash  # Installer bash si nécessaire
+    - apk add --no-cache curl bash gnupg
     - echo "Installation de Doppler"
     - curl -Ls https://cli.doppler.com/install.sh | sh
     - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702
     - echo "Démarrage de la base de données avec Docker Compose"
-    - doppler run --config dev -- docker compose up -d db  # Utiliser "docker compose" pour V2
+    - doppler run --config dev -- docker compose up -d db
     - sleep 10  # Attendre que PostgreSQL soit prêt
   script:
     - doppler run --config dev -- npm ci
     - doppler run --config dev -- npm run test
   after_script:
-    - docker compose down -v  # Utiliser "docker compose" ici aussi
+    - docker compose down -v
   only:
     - merge_requests
     - main
