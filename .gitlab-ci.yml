@@ -6,14 +6,13 @@ stages:
 
 services:
   - name: docker:24.0.5-dind
-    command: ["--experimental", "--host=tcp://0.0.0.0:2375", "--host=unix:///var/run/docker.sock"]
+    command: ["--experimental", "--tls=false"]
 
 variables:
   DOCKER_DRIVER: overlay2
   COMPOSE_PROJECT_NAME: gitlab_ci
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
-  DOCKER_PRIVILEGED: "true"
 
 lint:
   stage: lint
