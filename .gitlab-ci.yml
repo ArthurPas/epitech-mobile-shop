@@ -94,3 +94,5 @@ deploy:
     - main
   tags:
     - docker
+
+# test ci pour partie "test"
