@@ -15,7 +15,7 @@ lint:
     - curl -Ls https://cli.doppler.com/install.sh | sh
     - export DOPPLER_TOKEN="$DOPPLER_TOKEN"
     - doppler configure --token="$DOPPLER_TOKEN"
-    - doppler run -- npm ci
+    - doppler run -- DOPPLER_TOKEN="$DOPPLER_TOKEN" npm ci
   script:
     - npm run lint
   only:
