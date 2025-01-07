@@ -26,27 +26,23 @@ lint:
 
 test:
   stage: test
-  image: node:23
+  image: docker/compose:latest  # Image avec Docker Compose préinstallé
   services:
     - name: postgres:16
-      alias: db  # Alias db pour la connexion à la base de données
+      alias: db
   variables:
     POSTGRES_USER: $PG_USER
-    POSTGRES_PASSWORD: $PG_PASSWORD  # Mot de passe PostgreSQL
-    POSTGRES_DB: $PG_DB  # Base de données PostgreSQL
+    POSTGRES_PASSWORD: $PG_PASSWORD
+    POSTGRES_DB: $PG_DB
   before_script:
-    - echo "Installation de Doppler"
-    - curl -Ls https://cli.doppler.com/install.sh | sh  # Installer Doppler CLI
-    - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702  # Configurer Doppler
-    - echo "Démarrage de Docker Compose avec Doppler"
+    - curl -Ls https://cli.doppler.com/install.sh | sh
+    - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702
     - doppler run --config dev -- docker-compose up -d db
-    - sleep 10  # Attendre que PostgreSQL soit prêt
-    - docker-compose ps  # Vérifier l'état des services
   script:
-    - doppler run --config dev -- npm ci  # Installer les dépendances
-    - doppler run --config dev -- npm run test  # Lancer les tests
+    - doppler run --config dev -- npm ci
+    - doppler run --config dev -- npm run test
   after_script:
-    - docker-compose down -v  # Nettoyer les containers
+    - docker-compose down -v
   only:
     - merge_requests
     - main
