@@ -31,10 +31,9 @@ test:
     - name: postgres:16
       alias: db  # Alias db pour la connexion à la base de données
   variables:
-    DATABASE_URL: postgres://$PG_USER:$PG_PASSWORD@db:5432/$PG_DB  # URL de connexion à la DB
     POSTGRES_USER: $PG_USER
     POSTGRES_PASSWORD: $PG_PASSWORD  # Mot de passe PostgreSQL
-    POSTGRES_DB: $PG_DB
+    POSTGRES_DB: $PG_DB  # Base de données PostgreSQL
   before_script:
     - curl -Ls https://cli.doppler.com/install.sh | sh  # Installer Doppler CLI
     - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702  # Configurer Doppler
