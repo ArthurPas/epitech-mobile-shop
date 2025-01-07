@@ -39,6 +39,10 @@ test:
     - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702  # Configurer Doppler
     # Installer docker-compose si nécessaire
     - if ! command -v docker-compose &>/dev/null; then curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose; fi
+    # Vérification de Docker et Docker Compose
+    - docker --version  # Vérifier la version de Docker
+    - docker-compose --version  # Vérifier la version de Docker Compose
+    - docker info  # Afficher les informations Docker pour diagnostiquer
     # Utiliser docker-compose pour démarrer PostgreSQL
     - doppler run --config dev -- docker-compose up -d db
     - sleep 10  # Attendre que PostgreSQL soit prêt
