@@ -71,3 +71,6 @@ zap:
 		curl -s "http://localhost:$${ZAP_PORT}/JSON/core/view/alerts/" --data-urlencode "apikey=$${ZAP_API_KEY}" > alerts.json; \
 		echo "Alertes sauvegardées dans alerts.json."; \
 		kill $$(pgrep -f "zap.sh")'
+
+
+		# test pipeline
