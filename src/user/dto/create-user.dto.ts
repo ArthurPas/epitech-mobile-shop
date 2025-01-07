@@ -33,7 +33,7 @@ export class CreateUserDto {
   })
   @IsNotEmpty()
   @MinLength(3, { message: 'Username must have atleast 3 characters.' })
-  @IsAlphanumeric(null, {
+  @IsAlphanumeric('en-US', {
     message: 'Username does not allow other than alpha numeric chars.',
   })
   username: string;

@@ -1,6 +1,6 @@
-import { BillingDetail } from 'src/billing-details/entities/billing-detail.entity';
-import { Orderline } from 'src/orderline/entities/orderline.entity';
-import { User } from 'src/user/entities/user.entity';
+import { BillingDetail } from '../../billing-details/entities/billing-detail.entity';
+import { Orderline } from '../../orderline/entities/orderline.entity';
+import { User } from '../../user/entities/user.entity';
 import {
   Column,
   Entity,
