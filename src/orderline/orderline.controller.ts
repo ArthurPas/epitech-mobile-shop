@@ -11,7 +11,7 @@ import { OrderlineService } from './orderline.service';
 import { CreateOrderlineDto } from './dto/create-orderline.dto';
 import { UpdateOrderlineDto } from './dto/update-orderline.dto';
 
-@Controller('orderline')
+@Controller('orderlines')
 export class OrderlineController {
   constructor(private readonly orderlineService: OrderlineService) {}
 

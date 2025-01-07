@@ -84,8 +84,7 @@ export class UserService {
     // user.name = updateUserDto.name;
     // user.age = updateUserDto.age;
     user.email = updateUserDto.email;
-    // user.username = updateUserDto.username;
-    user.password = updateUserDto.password;
+    user.username = updateUserDto.username;
     user.id = id;
     return this.userRepository.save(user);
   }
