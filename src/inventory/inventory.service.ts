@@ -22,12 +22,12 @@ export class InventoryService {
   }
 
   async findOne(id: number) {
-    return this.inventoryRepository.findOne({ where: { id: id.toString() } });
+    return this.inventoryRepository.findOne({ where: { id: id } });
   }
 
   async update(id: number, updateInventoryDto: UpdateInventoryDto) {
     await this.inventoryRepository.update(id, updateInventoryDto);
-    return this.inventoryRepository.findOne({ where: { id: id.toString() } });
+    return this.inventoryRepository.findOne({ where: { id: id } });
   }
 
   async remove(id: number) {

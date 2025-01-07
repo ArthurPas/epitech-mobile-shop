@@ -23,8 +23,10 @@ export class ProductService {
     return this.productRepository.find();
   }
 
-  async findOne(id: number): Promise<ProductInfoDto | undefined> {
-    const product = await this.productRepository.findOne({ where: { id } });
+  async findOne(id: string): Promise<ProductInfoDto | undefined> {
+    const product = await this.productRepository.findOne({
+      where: { open_food_fact_id: id },
+    });
     if (!product) {
       throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
     }
