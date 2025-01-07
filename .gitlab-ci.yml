@@ -13,8 +13,8 @@ lint:
   image: node:23
   before_script:
     - curl -Ls https://cli.doppler.com/install.sh | sh
-    - echo "$DOPPLER_TOKEN" > .env
-    - export $(cat .env)
+    - echo "DOPPLER_TOKEN=$DOPPLER_TOKEN" > .env
+    - source .env
     - doppler configure --token="$DOPPLER_TOKEN"
     - doppler run -- DOPPLER_TOKEN="$DOPPLER_TOKEN" npm ci
   script:
