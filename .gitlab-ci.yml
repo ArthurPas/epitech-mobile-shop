@@ -12,6 +12,8 @@ lint:
   stage: lint
   image: node:23
   before_script:
+    - curl -Ls https://cli.doppler.com/install.sh | sh
+    - doppler login --token $DOPPLER_TOKEN
     - doppler run -- npm ci
   script:
     - npm run lint
