@@ -29,24 +29,18 @@ test:
   image: node:23
   services:
     - name: postgres:16
-      alias: db  # On continue d'utiliser l'alias db pour la connexion
+      alias: db
   variables:
-    # Variables d'environnement pour la base de données, fournies par Doppler
     DATABASE_URL: postgres://$PG_USER:$PG_PASSWORD@db:5432/$PG_DB
-    POSTGRES_USER: $PG_USER
-    POSTGRES_PASSWORD: $PG_PASSWORD
-    POSTGRES_DB: $PG_DB
   before_script:
-    - curl -Ls https://cli.doppler.com/install.sh | sh  # Installer Doppler CLI
-    - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702  # Configurer Doppler
-    - doppler run --config dev -- docker-compose up -d db  # Lancer Postgres via Docker Compose
-    - sleep 10  # Attendre que le service Postgres soit prêt
-    - docker-compose ps  # Vérifier l'état des services
+    - doppler run -- docker-compose up -d db
+    - sleep 10
+    - docker-compose ps
   script:
-    - doppler run --config dev -- npm ci  # Installer les dépendances
-    - doppler run --config dev -- npm run test  # Lancer les tests
+    - doppler run -- npm ci
+    - doppler run -- npm run test
   after_script:
-    - docker-compose down -v  # Nettoyer les containers
+    - docker-compose down -v
   only:
     - merge_requests
     - main
@@ -84,5 +78,3 @@ deploy:
     - main
   tags:
     - docker
-
-# test ci pour partie "test"
