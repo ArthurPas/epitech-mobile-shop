@@ -5,13 +5,15 @@ stages:
   - deploy
 
 services:
-  - docker:24.0.5-dind
+  - name: docker:24.0.5-dind
+    command: ["--experimental", "--host=tcp://0.0.0.0:2375", "--host=unix:///var/run/docker.sock"]
 
 variables:
   DOCKER_DRIVER: overlay2
   COMPOSE_PROJECT_NAME: gitlab_ci
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
+  DOCKER_PRIVILEGED: "true"
 
 lint:
   stage: lint
@@ -29,21 +31,30 @@ lint:
   tags:
     - docker
 
+services:
+  - name: docker:24.0.5-dind
+    command: ["--experimental", "--host=tcp://0.0.0.0:2375", "--host=unix:///var/run/docker.sock"]
+
+variables:
+  DOCKER_DRIVER: overlay2
+  COMPOSE_PROJECT_NAME: gitlab_ci
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_PRIVILEGED: "true"
+
 test:
   stage: test
   image: docker:24.0.5
   services:
-    - name: docker:24.0.5-dind  # Docker in Docker
+    - name: docker:24.0.5-dind
     - name: postgres:16
       alias: db
   variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
     POSTGRES_USER: $PG_USER
     POSTGRES_PASSWORD: $PG_PASSWORD
     POSTGRES_DB: $PG_DB
   before_script:
-    - apk add --no-cache curl bash gnupg
+    - apk add --no-cache curl bash gnupg docker-compose
     - echo "Installation de Doppler"
     - curl -Ls https://cli.doppler.com/install.sh | sh
     - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702
