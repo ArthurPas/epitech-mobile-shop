@@ -29,25 +29,17 @@ test:
   image: node:23
   services:
     - name: postgres:16
-      alias: db
-      environment:
-        # Variables d'environnement venant de Doppler
-        POSTGRES_USER: $PG_USER
-        POSTGRES_PASSWORD: $PG_PASSWORD
-        POSTGRES_DB: $PG_DB
-      healthcheck:
-        test: ["CMD-SHELL", "pg_isready -U $PG_USER"]
-        interval: 5s
-        timeout: 5s
-        retries: 5
+      alias: db  # On continue d'utiliser l'alias db pour la connexion
   variables:
-    # Configuration de l'URL de connexion à la base de données, en utilisant l'alias 'db' pour accéder au service Postgres
+    # Variables d'environnement pour la base de données, fournies par Doppler
     DATABASE_URL: postgres://$PG_USER:$PG_PASSWORD@db:5432/$PG_DB
+    POSTGRES_USER: $PG_USER
+    POSTGRES_PASSWORD: $PG_PASSWORD
+    POSTGRES_DB: $PG_DB
   before_script:
     - curl -Ls https://cli.doppler.com/install.sh | sh  # Installer Doppler CLI
-    - apt-get update && apt-get install -y docker-compose  # Installer docker-compose
     - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702  # Configurer Doppler
-    - doppler run --config dev -- docker-compose up -d db  # Lancer le service Postgres
+    - doppler run --config dev -- docker-compose up -d db  # Lancer Postgres via Docker Compose
     - sleep 10  # Attendre que le service Postgres soit prêt
     - docker-compose ps  # Vérifier l'état des services
   script:
