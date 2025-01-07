@@ -4,14 +4,15 @@ stages:
   - build
   - deploy
 
-services:
-  - name: docker:24.0.5-dind
-    alias: docker
-
 variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: "/certs"
   DOCKER_HOST: "unix:///var/run/docker.sock"
+
+services:
+  - name: docker:24.0.5-dind
+    alias: docker
+    privileged: true
 
 lint:
   stage: lint
@@ -76,11 +77,12 @@ build:
 
 deploy:
   stage: deploy
-  image: docker:latest
+  image: docker:24.0.5
   services:
-    - docker:dind
+    - docker:24.0.5-dind
   before_script:
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - apk add --no-cache docker-compose  # Si nécessaire
     - doppler run -- docker-compose build app
   script:
     - doppler run -- docker-compose up -d
