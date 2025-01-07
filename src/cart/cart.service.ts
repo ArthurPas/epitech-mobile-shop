@@ -7,6 +7,7 @@ import { Orderline } from 'src/orderline/entities/orderline.entity';
 import { Shop } from 'src/shop/entities/shop.entity';
 import { Inventory } from 'src/inventory/entities/inventory.entity';
 import { AddProductDto } from './dto/add-product-dto';
+import { RemoveProductDto } from './dto/remove-product-dto';
 
 @Injectable()
 export class CartService {
@@ -116,7 +117,8 @@ export class CartService {
     }
     const orderLine = await this.orderlineRepository.save(orderline);
     console.log('Orderline after ' + orderLine);
-    await this.updateOrderTotalPrice(order, quantity);
+    const price = orderline.price_at_order * quantity;
+    await this.updateOrderTotalPrice(order, price);
     await this.updateStock(productId, shopId, -quantity);
   }
 
@@ -137,8 +139,9 @@ export class CartService {
     console.log('Inventory before : ' + inventoryTEST.quantity);
   }
   async updateOrderTotalPrice(order: Order, price: number) {
+    const newPrice = Number(order.total_price) + Number(price);
     await this.orderRepository.update(order.id, {
-      total_price: order.total_price + price,
+      total_price: newPrice,
     });
     console.log('Order total price updated');
     await this.orderRepository.save(order);
@@ -199,32 +202,34 @@ export class CartService {
     return true;
   }
 
-  async removeFromCart(productId: number, orderId: number, shopId: number) {
+  async removeFromCart(removeProductDto: RemoveProductDto) {
     try {
-      if (orderId) {
-        // if order exists
-        const order = await this.orderRepository.findOne({
-          where: { id: orderId },
+      const order = await this.orderRepository.findOne({
+        where: { id: removeProductDto.orderId },
+        relations: ['orderlines'],
+      });
+      console.log('Order : ' + JSON.stringify(order));
+      if (order.orderlines) {
+        const orderline = await this.orderlineRepository.findOne({
+          where: {
+            order: { id: removeProductDto.orderId },
+            product: { id: removeProductDto.productId },
+          },
+          relations: ['product'],
         });
-        if (order.orderlines.length > 0) {
-          for (const orderline of order.orderlines) {
-            if (orderline.product.id === productId) {
-              this.updateQuantityOrderline(
-                order,
-                orderline,
-                productId,
-                shopId,
-                -1,
-              );
-              return true;
-            } else {
-              throw new Error('Product not found in order');
-            }
-          }
+        console.log('Orderline : ' + JSON.stringify(orderline));
+        if (orderline) {
+          this.updateQuantityOrderline(
+            order,
+            orderline,
+            removeProductDto.productId,
+            removeProductDto.shopId,
+            -1,
+          );
           return true;
+        } else {
+          throw new Error('No orderline, cant remove from cart');
         }
-      } else {
-        throw new Error('No order, cant remove from cart');
       }
     } catch (error) {
       throw error;
