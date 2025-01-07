@@ -31,30 +31,30 @@ test:
     - name: postgres:16
       alias: db
       environment:
+        # Variables d'environnement venant de Doppler
         POSTGRES_USER: $PG_USER
         POSTGRES_PASSWORD: $PG_PASSWORD
         POSTGRES_DB: $PG_DB
-      volumes:
-        - postgres_data:/var/lib/postgresql/data
       healthcheck:
         test: ["CMD-SHELL", "pg_isready -U $PG_USER"]
         interval: 5s
         timeout: 5s
         retries: 5
   variables:
+    # Configuration de l'URL de connexion à la base de données, en utilisant l'alias 'db' pour accéder au service Postgres
     DATABASE_URL: postgres://$PG_USER:$PG_PASSWORD@db:5432/$PG_DB
   before_script:
-    - curl -Ls https://cli.doppler.com/install.sh | sh
-    - apt-get update && apt-get install -y docker-compose
-    - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702
-    - doppler run --config dev -- docker-compose up -d db
-    - sleep 10
-    - docker-compose ps
+    - curl -Ls https://cli.doppler.com/install.sh | sh  # Installer Doppler CLI
+    - apt-get update && apt-get install -y docker-compose  # Installer docker-compose
+    - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702  # Configurer Doppler
+    - doppler run --config dev -- docker-compose up -d db  # Lancer le service Postgres
+    - sleep 10  # Attendre que le service Postgres soit prêt
+    - docker-compose ps  # Vérifier l'état des services
   script:
-    - doppler run --config dev -- npm ci
-    - doppler run --config dev -- npm run test
+    - doppler run --config dev -- npm ci  # Installer les dépendances
+    - doppler run --config dev -- npm run test  # Lancer les tests
   after_script:
-    - docker-compose down -v
+    - docker-compose down -v  # Nettoyer les containers
   only:
     - merge_requests
     - main
