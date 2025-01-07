@@ -35,25 +35,10 @@ test:
     POSTGRES_PASSWORD: $PG_PASSWORD  # Mot de passe PostgreSQL
     POSTGRES_DB: $PG_DB  # Base de données PostgreSQL
   before_script:
-    - echo "Installation de Docker"
-    - curl -fsSL https://get.docker.com -o get-docker.sh
-    - sh get-docker.sh
-    - docker --version
-    - echo "Installation de Docker Compose"
-    - curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-    - chmod +x /usr/local/bin/docker-compose
-    - docker-compose --version
-    - sudo systemctl start docker
     - echo "Installation de Doppler"
     - curl -Ls https://cli.doppler.com/install.sh | sh  # Installer Doppler CLI
     - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702  # Configurer Doppler
-    # Installer docker-compose si nécessaire
-    - if ! command -v docker-compose &>/dev/null; then curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose; fi
-    # Vérification de Docker et Docker Compose
-    - docker --version  # Vérifier la version de Docker
-    - docker-compose --version  # Vérifier la version de Docker Compose
-    - docker info  # Afficher les informations Docker pour diagnostiquer
-    # Utiliser docker-compose pour démarrer PostgreSQL
+    - echo "Démarrage de Docker Compose avec Doppler"
     - doppler run --config dev -- docker-compose up -d db
     - sleep 10  # Attendre que PostgreSQL soit prêt
     - docker-compose ps  # Vérifier l'état des services
