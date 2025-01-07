@@ -14,7 +14,7 @@ lint:
   before_script:
     - curl -Ls https://cli.doppler.com/install.sh | sh
     - echo "DOPPLER_TOKEN=$DOPPLER_TOKEN"
-    - doppler setup --token $DOPPLER_TOKEN --workspace t-dev-702 --project t-dev-702
+    - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702
     - doppler run -- npm ci
   script:
     - npm run lint
