@@ -30,15 +30,31 @@ test:
   services:
     - name: postgres:16
       alias: db
+      environment:
+        POSTGRES_USER: $PG_USER
+        POSTGRES_PASSWORD: $PG_PASSWORD
+        POSTGRES_DB: $PG_DB
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      ports:
+        - '5432:5432'
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U $PG_USER"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
   variables:
     DATABASE_URL: postgres://$PG_USER:$PG_PASSWORD@db:5432/$PG_DB
   before_script:
-    - doppler run -- docker-compose up -d db
+    - curl -Ls https://cli.doppler.com/install.sh | sh
+    - apt-get update && apt-get install -y docker-compose
+    - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702
+    - doppler run --config dev -- docker-compose up -d db
     - sleep 10
     - docker-compose ps
   script:
-    - doppler run -- npm ci
-    - doppler run -- npm run test
+    - doppler run --config dev -- npm ci
+    - doppler run --config dev -- npm run test
   after_script:
     - docker-compose down -v
   only:
