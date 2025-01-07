@@ -41,7 +41,7 @@ test:
     # Installer docker-compose si nécessaire
     - if ! command -v docker-compose &>/dev/null; then curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose; fi
     # Utiliser docker-compose pour démarrer PostgreSQL
-    - doppler run --config dev -- docker-compose --env-file .env.local up -d db
+    - doppler run --config dev -- docker-compose up -d db
     - sleep 10  # Attendre que PostgreSQL soit prêt
     - docker-compose ps  # Vérifier l'état des services
   script:
