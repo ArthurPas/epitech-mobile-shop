@@ -13,6 +13,7 @@ variables:
   COMPOSE_PROJECT_NAME: gitlab_ci
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
+  DOCKER_PRIVILEGED: "true"  # Ajouté pour permettre l'accès root aux conteneurs Docker
 
 lint:
   stage: lint
@@ -30,22 +31,12 @@ lint:
   tags:
     - docker
 
-services:
-  - name: docker:24.0.5-dind
-    command: ["--experimental", "--host=tcp://0.0.0.0:2375", "--host=unix:///var/run/docker.sock"]
-
-variables:
-  DOCKER_DRIVER: overlay2
-  COMPOSE_PROJECT_NAME: gitlab_ci
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_TLS_CERTDIR: ""
-  DOCKER_PRIVILEGED: "true"
-
 test:
   stage: test
   image: docker:24.0.5
   services:
     - name: docker:24.0.5-dind
+      command: ["--experimental", "--host=tcp://0.0.0.0:2375", "--host=unix:///var/run/docker.sock"]
     - name: postgres:16
       alias: db
   variables:
@@ -58,13 +49,13 @@ test:
     - curl -Ls https://cli.doppler.com/install.sh | sh
     - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702
     - echo "Démarrage de la base de données avec Docker Compose"
-    - doppler run --config dev -- docker compose up -d db
+    - doppler run --config dev -- docker-compose up -d db
     - sleep 10  # Attendre que PostgreSQL soit prêt
   script:
     - doppler run --config dev -- npm ci
     - doppler run --config dev -- npm run test
   after_script:
-    - docker compose down -v
+    - docker-compose down -v
   only:
     - merge_requests
     - main
