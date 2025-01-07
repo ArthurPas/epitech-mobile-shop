@@ -35,12 +35,12 @@ test:
     POSTGRES_PASSWORD: $PG_PASSWORD
     POSTGRES_DB: $PG_DB
   before_script:
+    - echo "Installation de Doppler"
     - curl -Ls https://cli.doppler.com/install.sh | sh
     - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702
-    - curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-    - chmod +x /usr/local/bin/docker-compose
-    - docker-compose --version
+    - echo "Démarrage de la base de données avec Docker Compose"
     - doppler run --config dev -- docker-compose up -d db
+    - sleep 10  # Attendre que PostgreSQL soit prêt
   script:
     - doppler run --config dev -- npm ci
     - doppler run --config dev -- npm run test
