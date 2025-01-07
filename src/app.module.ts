@@ -12,6 +12,7 @@ import { OrderModule } from './order/order.module';
 import { OrderlineModule } from './orderline/orderline.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { BillingDetailsModule } from './billing-details/billing-details.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { BillingDetailsModule } from './billing-details/billing-details.module';
     InventoryModule,
     OrderModule,
     OrderlineModule,
+    CartModule,
     BillingDetailsModule,
   ],
 

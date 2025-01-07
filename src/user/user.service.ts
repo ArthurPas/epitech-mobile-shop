@@ -78,7 +78,7 @@ export class UserService {
    * @param updateUserDto this is partial type of createUserDto.
    * @returns promise of udpate user
    */
-  updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+  updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     const user: User = new User();
     //TODO: update this with new user entity
     // user.name = updateUserDto.name;
@@ -86,7 +86,6 @@ export class UserService {
     user.email = updateUserDto.email;
     // user.username = updateUserDto.username;
     user.password = updateUserDto.password;
-    user.id = id;
     return this.userRepository.save(user);
   }
 
