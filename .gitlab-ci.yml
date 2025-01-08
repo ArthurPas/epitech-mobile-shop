@@ -44,6 +44,8 @@ test:
   before_script:
     - docker info
     - apk add --no-cache curl bash gnupg docker-compose
+    - echo "Installation de Node.js et npm"
+    - apk add --no-cache nodejs npm
     - echo "Installation de Doppler"
     - curl -Ls https://cli.doppler.com/install.sh | sh
     - doppler configure --token $DOPPLER_TOKEN --scope t-dev-702
