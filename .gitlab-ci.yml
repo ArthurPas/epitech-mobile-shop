@@ -40,7 +40,7 @@ test:
     - docker:24.0.5-dind
     - name: postgres:16
       alias: db
-  image: docker:24.0.5
+  image: node:23
   before_script:
     - docker info
     - apk add --no-cache curl bash gnupg docker-compose
