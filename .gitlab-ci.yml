@@ -31,16 +31,16 @@ lint:
 
 test:
   stage: test
-  image: docker:24.0.5
-  services:
-    - name: docker:24.0.5-dind
-      command: ["--experimental", "--host=unix:///var/run/docker.sock"]
-    - name: postgres:16
-      alias: db
   variables:
     POSTGRES_USER: $PG_USER
     POSTGRES_PASSWORD: $PG_PASSWORD
     POSTGRES_DB: $PG_DB
+    DOCKER_HOST: "unix:///runner/services/docker/docker.sock"
+  services:
+    - docker:24.0.5-dind
+    - name: postgres:16
+      alias: db
+  image: docker:24.0.5
   before_script:
     - docker info
     - apk add --no-cache curl bash gnupg docker-compose
