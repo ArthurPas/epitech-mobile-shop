@@ -43,6 +43,7 @@ test:
     POSTGRES_PASSWORD: $PG_PASSWORD
     POSTGRES_DB: $PG_DB
   before_script:
+    - docker info
     - apk add --no-cache curl bash gnupg docker-compose
     - echo "Installation de Doppler"
     - curl -Ls https://cli.doppler.com/install.sh | sh
