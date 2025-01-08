@@ -94,9 +94,34 @@ services:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_extensions:/opt/sonarqube/extensions
       - sonarqube_logs:/opt/sonarqube/logs
+  
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.16.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      # - ELASTICSEARCH_USERNAME=ouioui
+      # - ELASTICSEARCH_PASSWORD=sagrossevoiture
+      - xpack.security.enabled=false
+    ports:
+      - '9200:9200'   # Port standard pour HTTP
+      - '9800:9800'   # Port pour les outils de monitoring
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - elastic-net
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.16.1
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - '5601:5601'
 
 networks:
   monitoring:
+  elastic-net:
 
 
 volumes:
@@ -105,3 +130,4 @@ volumes:
   sonarqube_data:
   sonarqube_extensions:
   sonarqube_logs:
+  elasticsearch_data:
