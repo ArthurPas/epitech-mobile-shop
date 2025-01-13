@@ -10,6 +10,8 @@ import { AddProductDto } from './dto/add-product-dto';
 import { RemoveProductDto } from './dto/remove-product-dto';
 import { CartResponseDao } from './dao/cart-response';
 import { User } from 'src/user/entities/user.entity';
+import { ProductService } from 'src/product/product.service';
+import { ProductInShop } from 'src/product/dto/product-info.dto';
 
 @Injectable()
 export class CartService {
@@ -27,6 +29,7 @@ export class CartService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly productService: ProductService,
   ) {}
 
   async newOrdelineByNewProduct(
@@ -243,7 +246,7 @@ export class CartService {
 
   async getCart(userId: number): Promise<CartResponseDao> {
     const cart = new CartResponseDao();
-    cart.productId = [];
+    cart.products = [];
     const user = await this.userRepository.findOne({
       where: { id: userId },
     });
@@ -261,8 +264,14 @@ export class CartService {
     });
     for (const orderline of orderlines) {
       console.log('Orderline : ' + JSON.stringify(orderline));
-      cart.productId.push(orderline.product.id.toString());
+      const productInfos = await this.getInfoProduct(
+        orderline.product.open_food_fact_id,
+      );
+      cart.products.push(productInfos);
     }
     return cart;
+  }
+  async getInfoProduct(productId: string): Promise<ProductInShop> {
+    return await this.productService.findOne(productId);
   }
 }

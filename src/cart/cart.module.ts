@@ -8,6 +8,7 @@ import { Inventory } from 'src/inventory/entities/inventory.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { Shop } from 'src/shop/entities/shop.entity';
 import { User } from 'src/user/entities/user.entity';
+import { ProductService } from 'src/product/product.service';
 
 @Module({
   imports: [
@@ -19,6 +20,6 @@ import { User } from 'src/user/entities/user.entity';
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [CartController],
-  providers: [CartService],
+  providers: [CartService, ProductService],
 })
 export class CartModule {}
