@@ -8,6 +8,8 @@ import { Shop } from '../shop/entities/shop.entity';
 import { Inventory } from '../inventory/entities/inventory.entity';
 import { AddProductDto } from './dto/add-product-dto';
 import { RemoveProductDto } from './dto/remove-product-dto';
+import { CartResponseDao } from './dao/cart-response';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class CartService {
@@ -23,6 +25,8 @@ export class CartService {
 
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async newOrdelineByNewProduct(
@@ -235,5 +239,30 @@ export class CartService {
       throw error;
     }
     return true;
+  }
+
+  async getCart(userId: number): Promise<CartResponseDao> {
+    const cart = new CartResponseDao();
+    cart.productId = [];
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+    console.log('User : ' + JSON.stringify(user));
+    const order = await this.orderRepository.findOne({
+      relations: ['orderlines'],
+      where: { user: user, is_paid: false },
+    });
+    console.log('Order : ' + JSON.stringify(order));
+    cart.userId = Number(userId);
+    cart.orderId = order.id;
+    const orderlines = await this.orderlineRepository.find({
+      where: { order: order },
+      relations: ['product'],
+    });
+    for (const orderline of orderlines) {
+      console.log('Orderline : ' + JSON.stringify(orderline));
+      cart.productId.push(orderline.product.id.toString());
+    }
+    return cart;
   }
 }
