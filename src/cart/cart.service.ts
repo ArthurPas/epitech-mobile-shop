@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Product } from 'src/product/entities/product.entity';
-import { Order } from 'src/order/entities/order.entity';
-import { Orderline } from 'src/orderline/entities/orderline.entity';
-import { Shop } from 'src/shop/entities/shop.entity';
-import { Inventory } from 'src/inventory/entities/inventory.entity';
+import { Product } from '../product/entities/product.entity';
+import { Order } from '../order/entities/order.entity';
+import { Orderline } from '../orderline/entities/orderline.entity';
+import { Shop } from '../shop/entities/shop.entity';
+import { Inventory } from '../inventory/entities/inventory.entity';
 import { AddProductDto } from './dto/add-product-dto';
 import { RemoveProductDto } from './dto/remove-product-dto';
 
