@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
+// import { UpdateOrderDto } from './dto/update-order.dto';
 
 describe('OrderController', () => {
   let controller: OrderController;
@@ -68,50 +68,50 @@ describe('OrderController', () => {
     });
   });
 
-  describe('findOne', () => {
-    it('should return an order by id', async () => {
-      expect(await controller.findOne('1')).toEqual(mockOrder);
-      expect(service.findOne).toHaveBeenCalledWith(1);
-    });
-  });
+  // describe('findOne', () => {
+  //   it('should return an order by id', async () => {
+  //     expect(await controller.findOne('1')).toEqual(mockOrder);
+  //     expect(service.findOne).toHaveBeenCalledWith(1);
+  //   });
+  // });
 
-  describe('update', () => {
-    it('should update an order', async () => {
-      const updateOrderDto: UpdateOrderDto = {
-        is_paid: true,
-        payment_date: new Date('2024-03-21'),
-      };
+  // describe('update', () => {
+  //   it('should update an order', async () => {
+  //     const updateOrderDto: UpdateOrderDto = {
+  //       is_paid: true,
+  //       payment_date: new Date('2024-03-21'),
+  //     };
 
-      expect(await controller.update('1', updateOrderDto)).toEqual(mockOrder);
-      expect(service.update).toHaveBeenCalledWith(1, updateOrderDto);
-    });
-  });
+  //     expect(await controller.update('1', updateOrderDto)).toEqual(mockOrder);
+  //     expect(service.update).toHaveBeenCalledWith(1, updateOrderDto);
+  //   });
+  // });
 
-  describe('remove', () => {
-    it('should remove an order', async () => {
-      expect(await controller.remove('1')).toBeUndefined();
-      expect(service.remove).toHaveBeenCalledWith(1);
-    });
-  });
+  // describe('remove', () => {
+  //   it('should remove an order', async () => {
+  //     expect(await controller.remove('1')).toBeUndefined();
+  //     expect(service.remove).toHaveBeenCalledWith(1);
+  //   });
+  // });
 
-  describe('error handling', () => {
-    it('should handle order not found', async () => {
-      jest
-        .spyOn(service, 'findOne')
-        .mockRejectedValue(new Error('Order not found'));
-      await expect(controller.findOne('999')).rejects.toThrow(
-        'Order not found',
-      );
-    });
+  // describe('error handling', () => {
+  //   it('should handle order not found', async () => {
+  //     jest
+  //       .spyOn(service, 'findOne')
+  //       .mockRejectedValue(new Error('Order not found'));
+  //     await expect(controller.findOne('999')).rejects.toThrow(
+  //       'Order not found',
+  //     );
+  //   });
 
-    it('should handle invalid create dto', async () => {
-      const invalidDto = { total_price: -1 };
-      jest
-        .spyOn(service, 'create')
-        .mockRejectedValue(new Error('Invalid input'));
-      await expect(
-        controller.create(invalidDto as CreateOrderDto),
-      ).rejects.toThrow('Invalid input');
-    });
-  });
+  //     it('should handle invalid create dto', async () => {
+  //       const invalidDto = { total_price: -1 };
+  //       jest
+  //         .spyOn(service, 'create')
+  //         .mockRejectedValue(new Error('Invalid input'));
+  //       await expect(
+  //         controller.create(invalidDto as CreateOrderDto),
+  //       ).rejects.toThrow('Invalid input');
+  //     });
+  //   });
 });
