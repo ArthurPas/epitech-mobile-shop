@@ -63,6 +63,18 @@ export class UserService {
   }
 
   /**
+   * this function is used to get one user by its username
+   * @returns promise of of a user
+   */
+  findOneWithPassword(username: string): Promise<User> {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .addSelect('user.password')
+      .where('user.username = :username', { username })
+      .getOne();
+  }
+
+  /**
    * this function used to get data of use whose id is passed in parameter
    * @param id is type of number, which represent the id of user.
    * @returns promise of user
