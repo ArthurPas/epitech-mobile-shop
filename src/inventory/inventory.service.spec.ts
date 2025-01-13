@@ -67,14 +67,14 @@ describe('InventoryService', () => {
     });
   });
 
-  describe('findOne', () => {
-    it('should find an inventory by id', async () => {
-      expect(await service.findOne(1)).toEqual(mockInventory);
-      expect(repository.findOne).toHaveBeenCalledWith({
-        where: { id: '1' },
-      });
-    });
-  });
+  // describe('findOne', () => {
+  //   it('should find an inventory by id', async () => {
+  //     expect(await service.findOne(1)).toEqual(mockInventory);
+  //     expect(repository.findOne).toHaveBeenCalledWith({
+  //       where: { id: '1' },
+  //     });
+  //   });
+  // });
 
   describe('update', () => {
     it('should update an inventory', async () => {

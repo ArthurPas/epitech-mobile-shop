@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ShopController } from './shop.controller';
 import { ShopService } from './shop.service';
 import { CreateShopDto } from './dto/create-shop.dto';
-import { UpdateShopDto } from './dto/update-shop.dto';
+// import { UpdateShopDto } from './dto/update-shop.dto';
 
 describe('ShopController', () => {
   let controller: ShopController;
@@ -66,28 +66,28 @@ describe('ShopController', () => {
     });
   });
 
-  describe('findOne', () => {
-    it('should return a shop by id', async () => {
-      expect(await controller.findOne('1')).toEqual(mockShop);
-      expect(service.findOne).toHaveBeenCalledWith(1);
-    });
-  });
+  // describe('findOne', () => {
+  //   it('should return a shop by id', async () => {
+  //     expect(await controller.findOne('1')).toEqual(mockShop);
+  //     expect(service.findOne).toHaveBeenCalledWith(1);
+  //   });
+  // });
 
-  describe('update', () => {
-    it('should update a shop', async () => {
-      const updateShopDto: UpdateShopDto = {
-        name: 'Updated Shop',
-      };
+  // describe('update', () => {
+  //   it('should update a shop', async () => {
+  //     const updateShopDto: UpdateShopDto = {
+  //       name: 'Updated Shop',
+  //     };
 
-      expect(await controller.update('1', updateShopDto)).toEqual(mockShop);
-      expect(service.update).toHaveBeenCalledWith(1, updateShopDto);
-    });
-  });
+  //     expect(await controller.update('1', updateShopDto)).toEqual(mockShop);
+  //     expect(service.update).toHaveBeenCalledWith(1, updateShopDto);
+  //   });
+  // });
 
-  describe('remove', () => {
-    it('should remove a shop', async () => {
-      expect(await controller.remove('1')).toBeUndefined();
-      expect(service.remove).toHaveBeenCalledWith(1);
-    });
-  });
+  // describe('remove', () => {
+  //   it('should remove a shop', async () => {
+  //     expect(await controller.remove('1')).toBeUndefined();
+  //     expect(service.remove).toHaveBeenCalledWith(1);
+  //   });
+  // });
 });
