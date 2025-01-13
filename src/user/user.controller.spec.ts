@@ -77,7 +77,7 @@ describe('UserController', () => {
       const updateUserDto: UpdateUserDto = {
         first_name: 'UpdatedJohn',
       };
-      expect(await controller.update('1', updateUserDto)).toEqual(mockUser);
+      expect(await controller.update(1, updateUserDto)).toEqual(mockUser);
       expect(service.updateUser).toHaveBeenCalledWith(1, updateUserDto);
     });
   });

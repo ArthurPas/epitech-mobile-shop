@@ -22,6 +22,7 @@ describe('UserService', () => {
     save: jest.fn().mockResolvedValue(mockUser),
     find: jest.fn().mockResolvedValue([mockUser]),
     findOne: jest.fn().mockResolvedValue(mockUser),
+    findOneBy: jest.fn().mockResolvedValue(mockUser),
     update: jest.fn().mockResolvedValue({ affected: 1 }),
     delete: jest.fn().mockResolvedValue({ affected: 1 }),
   };
@@ -70,7 +71,7 @@ describe('UserService', () => {
     });
 
     it('should handle user not found', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+      jest.spyOn(repository, 'findOneBy').mockResolvedValue(null);
       await expect(service.viewUser(999)).rejects.toThrow();
     });
   });

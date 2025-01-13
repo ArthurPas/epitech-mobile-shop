@@ -23,9 +23,9 @@ export class ProductService {
     return this.productRepository.find();
   }
 
-  async findOne(openFoodFactId: string): Promise<ProductInfoDto | undefined> {
+  async findOne(openFoodFactId: number): Promise<ProductInfoDto | undefined> {
     const product = await this.productRepository.findOne({
-      where: { open_food_fact_id: openFoodFactId },
+      where: { open_food_fact_id: String(openFoodFactId) },
     });
     if (!product) {
       throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
