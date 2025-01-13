@@ -25,8 +25,7 @@ export interface ProductOFF {
   nutriments: Nutriments;
 }
 
-export interface ProductInShop {
-  product: ProductOFF;
+export interface ProductInShop extends ProductOFF {
   available: boolean;
   availableQuantity: number;
   price: number;

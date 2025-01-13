@@ -72,7 +72,7 @@ export class ProductService {
       throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
     }
     const productInShop: ProductInShop = {
-      product: productOFF,
+      ...productOFF,
       available: inventory.quantity > 0,
       availableQuantity: inventory.quantity,
       price: inventory.price,
