@@ -26,17 +26,17 @@ export class ShopController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.shopService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.shopService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateShopDto: UpdateShopDto) {
+  update(@Param('id') id: number, @Body() updateShopDto: UpdateShopDto) {
     return this.shopService.update(+id, updateShopDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.shopService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.shopService.remove(id);
   }
 }

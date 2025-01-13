@@ -14,7 +14,6 @@ export class CreateOrderDto {
 
   @ApiProperty()
   @IsDateString()
-  @IsNotEmpty()
   payment_date: Date;
 
   @ApiProperty()
@@ -29,6 +28,5 @@ export class CreateOrderDto {
 
   @ApiProperty()
   @IsNumber()
-  @IsNotEmpty()
   billingId: number;
 }

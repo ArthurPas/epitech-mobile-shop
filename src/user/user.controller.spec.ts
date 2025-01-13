@@ -67,7 +67,7 @@ describe('UserController', () => {
 
   describe('findOne', () => {
     it('should return a user by id', async () => {
-      expect(await controller.findOne('1')).toEqual(mockUser);
+      expect(await controller.findOne(1)).toEqual(mockUser);
       expect(service.viewUser).toHaveBeenCalledWith(1);
     });
   });
@@ -94,7 +94,7 @@ describe('UserController', () => {
       jest
         .spyOn(service, 'viewUser')
         .mockRejectedValue(new Error('User not found'));
-      await expect(controller.findOne('999')).rejects.toThrow('User not found');
+      await expect(controller.findOne(999)).rejects.toThrow('User not found');
     });
 
     it('should handle invalid user creation', async () => {
