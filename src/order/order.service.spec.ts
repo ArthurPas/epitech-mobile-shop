@@ -25,7 +25,8 @@ describe('OrderService', () => {
     save: jest.fn().mockResolvedValue(mockOrder),
     find: jest.fn().mockResolvedValue([mockOrder]),
     findOne: jest.fn().mockResolvedValue(mockOrder),
-    update: jest.fn().mockResolvedValue({ affected: 1 }),
+    findOneBy: jest.fn().mockResolvedValue(mockOrder),
+    update: jest.fn().mockResolvedValue(mockOrder),
     delete: jest.fn().mockResolvedValue({ affected: 1 }),
   };
 

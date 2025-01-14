@@ -9,9 +9,9 @@ import { Inventory } from '../inventory/entities/inventory.entity';
 import { AddProductDto } from './dto/add-product-dto';
 import { RemoveProductDto } from './dto/remove-product-dto';
 import { CartResponseDao } from './dao/cart-response';
-import { User } from 'src/user/entities/user.entity';
-import { ProductService } from 'src/product/product.service';
-import { ProductInShop } from 'src/product/dto/product-info.dto';
+import { User } from '../user/entities/user.entity';
+import { ProductService } from '../product/product.service';
+import { ProductInShop } from '../product/dto/product-info.dto';
 import { CreateOrderlineDto } from '../orderline/dto/create-orderline.dto';
 
 @Injectable()
@@ -301,6 +301,6 @@ export class CartService {
     return cart;
   }
   async getInfoProduct(productId: string): Promise<ProductInShop> {
-    return await this.productService.findOne(productId);
+    return await this.productService.findOne(+productId);
   }
 }

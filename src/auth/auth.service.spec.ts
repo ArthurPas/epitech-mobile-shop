@@ -22,7 +22,7 @@ describe('AuthService', () => {
   };
 
   const mockUserService = {
-    findOne: jest.fn().mockResolvedValue(mockUser),
+    findOneWithPassword: jest.fn().mockResolvedValue(mockUser),
   };
 
   const mockJwtService = {
@@ -57,12 +57,14 @@ describe('AuthService', () => {
     it('should return user object when credentials are valid', async () => {
       jest.spyOn(service, 'validateUser');
       const result = await service.validateUser('testuser', 'password123');
-      expect(userService.findOne).toHaveBeenCalledWith('testuser');
+      expect(userService.findOneWithPassword).toHaveBeenCalledWith('testuser');
       expect(result).toBeDefined();
     });
 
     it('should return null when user is not found', async () => {
-      jest.spyOn(userService, 'findOne').mockResolvedValueOnce(null);
+      jest
+        .spyOn(userService, 'findOneWithPassword')
+        .mockResolvedValueOnce(null);
       const result = await service.validateUser('wronguser', 'password123');
       expect(result).toBeNull();
     });

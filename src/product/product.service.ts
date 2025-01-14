@@ -5,8 +5,8 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 
-import { Inventory } from 'src/inventory/entities/inventory.entity';
-import { Shop } from 'src/shop/entities/shop.entity';
+import { Inventory } from '../inventory/entities/inventory.entity';
+import { Shop } from '../shop/entities/shop.entity';
 import { ProductInShop, ProductOFF } from './dto/product-info.dto';
 
 const urlOpenFoodFact = 'https://world.openfoodfacts.org/api/v2/product';
@@ -31,9 +31,9 @@ export class ProductService {
     return this.productRepository.find();
   }
 
-  async findOne(id: string): Promise<ProductInShop | undefined> {
+  async findOne(openFoodFactId: number): Promise<ProductInShop | undefined> {
     const product = await this.productRepository.findOne({
-      where: { open_food_fact_id: id },
+      where: { open_food_fact_id: String(openFoodFactId) },
     });
     if (!product) {
       throw new HttpException('Product not found', HttpStatus.NOT_FOUND);

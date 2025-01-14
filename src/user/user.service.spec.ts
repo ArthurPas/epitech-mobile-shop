@@ -22,6 +22,7 @@ describe('UserService', () => {
     save: jest.fn().mockResolvedValue(mockUser),
     find: jest.fn().mockResolvedValue([mockUser]),
     findOne: jest.fn().mockResolvedValue(mockUser),
+    findOneBy: jest.fn().mockResolvedValue(mockUser),
     update: jest.fn().mockResolvedValue({ affected: 1 }),
     delete: jest.fn().mockResolvedValue({ affected: 1 }),
   };
@@ -64,23 +65,23 @@ describe('UserService', () => {
     });
   });
 
-  // describe('viewUser', () => {
-  //   it('should return a single user', async () => {
-  //     expect(await service.viewUser(1)).toEqual(mockUser);
-  //   });
+  describe('viewUser', () => {
+    it('should return a single user', async () => {
+      expect(await service.viewUser(1)).toEqual(mockUser);
+    });
 
-  //   it('should handle user not found', async () => {
-  //     jest.spyOn(repository, 'findOne').mockResolvedValue(null);
-  //     await expect(service.viewUser(999)).rejects.toThrow();
-  //   });
-  // });
+    it('should handle user not found', async () => {
+      jest.spyOn(repository, 'findOneBy').mockResolvedValue(null);
+      await expect(service.viewUser(999)).rejects.toThrow();
+    });
+  });
 
-  // describe('updateUser', () => {
-  //   it('should update a user', async () => {
-  //     const updateUserDto = { first_name: 'Updated' };
-  //     expect(await service.updateUser(1, updateUserDto)).toEqual(mockUser);
-  //   });
-  // });
+  describe('updateUser', () => {
+    it('should update a user', async () => {
+      const updateUserDto = { first_name: 'Updated' };
+      expect(await service.updateUser(1, updateUserDto)).toEqual(mockUser);
+    });
+  });
 
   describe('removeUser', () => {
     it('should delete a user', async () => {

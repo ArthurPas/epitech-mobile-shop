@@ -1,40 +1,47 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { CartController } from './cart.controller';
 import { CartService } from './cart.service';
+import { mockInventoryService } from '../inventory/test-data';
+import { mockOrderService } from '../order/test-data';
+import { mockOrderlineService } from '../orderline/test-data';
+import { mockShopService } from '../shop/test-data';
+import { mockProductService } from '../product/test-data';
+import { Inventory } from '../inventory/entities/inventory.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Order } from '../order/entities/order.entity';
 import { Orderline } from '../orderline/entities/orderline.entity';
 import { Shop } from '../shop/entities/shop.entity';
-import { Inventory } from '../inventory/entities/inventory.entity';
 import { Product } from '../product/entities/product.entity';
 import { User } from '../user/entities/user.entity';
 import { ProductService } from '../product/product.service';
 
-describe('CartService', () => {
-  let service: CartService;
+describe('InventoryController', () => {
+  let controller: CartController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      controllers: [CartController],
       providers: [
         CartService,
         {
+          provide: getRepositoryToken(Inventory),
+          useValue: mockInventoryService,
+        },
+        {
           provide: getRepositoryToken(Order),
-          useValue: {},
+          useValue: mockOrderService,
         },
         {
           provide: getRepositoryToken(Orderline),
-          useValue: {},
+          useValue: mockOrderlineService,
         },
         {
           provide: getRepositoryToken(Shop),
-          useValue: {},
-        },
-        {
-          provide: getRepositoryToken(Inventory),
-          useValue: {},
+          useValue: mockShopService,
         },
         {
           provide: getRepositoryToken(Product),
-          useValue: {},
+          useValue: mockProductService,
         },
         {
           provide: getRepositoryToken(User),
@@ -47,10 +54,10 @@ describe('CartService', () => {
       ],
     }).compile();
 
-    service = module.get<CartService>(CartService);
+    controller = module.get<CartController>(CartController);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(controller).toBeDefined();
   });
 });
