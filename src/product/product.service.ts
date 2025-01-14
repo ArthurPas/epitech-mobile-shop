@@ -4,7 +4,10 @@ import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
-import { ProductInfoDto } from './dto/product-info.dto';
+
+import { Inventory } from 'src/inventory/entities/inventory.entity';
+import { Shop } from 'src/shop/entities/shop.entity';
+import { ProductInShop, ProductOFF } from './dto/product-info.dto';
 
 const urlOpenFoodFact = 'https://world.openfoodfacts.org/api/v2/product';
 @Injectable()
@@ -12,6 +15,11 @@ export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+
+    @InjectRepository(Inventory)
+    private readonly inventoryRepository: Repository<Inventory>,
+    @InjectRepository(Shop)
+    private readonly shopRepository: Repository<Shop>,
   ) {}
 
   async create(createProductDto: CreateProductDto) {
@@ -23,7 +31,7 @@ export class ProductService {
     return this.productRepository.find();
   }
 
-  async findOne(id: string): Promise<ProductInfoDto | undefined> {
+  async findOne(id: string): Promise<ProductInShop | undefined> {
     const product = await this.productRepository.findOne({
       where: { open_food_fact_id: id },
     });
@@ -40,23 +48,69 @@ export class ProductService {
         HttpStatus.SERVICE_UNAVAILABLE,
       );
     }
-    const externalProductDetails = await response.json();
-    const productInfoDto: ProductInfoDto = {
-      open_food_fact_id: product.open_food_fact_id,
-      shopId: 1,
-      name: externalProductDetails.product.name,
-      brands: externalProductDetails.product.brands,
-      product_name_fr: externalProductDetails.product.product_name_fr,
-      generic_name_fr: externalProductDetails.product.generic_name_fr,
-      ingredients_text: externalProductDetails.product.ingredients_text,
-      link: externalProductDetails.product.link,
-      categories: externalProductDetails.product.categories,
-      ingredients: externalProductDetails.product.ingredients,
-      allergens: externalProductDetails.product.allergens,
-      image_url: externalProductDetails.product.image_url,
-      quantity: externalProductDetails.product.quantity,
+    const productOFF: ProductOFF = await response.json();
+
+    const shop = await this.shopRepository.findOne({
+      where: { id: 1 },
+    });
+    if (!shop) {
+      throw new HttpException('Shop not found', HttpStatus.NOT_FOUND);
+    }
+    return await this.getProductInfos(product, shop, productOFF);
+  }
+
+  async getProductInfos(
+    product: Product,
+    shop: Shop,
+    productOFF: ProductOFF,
+  ): Promise<ProductInShop> {
+    const inventory = await this.inventoryRepository.findOne({
+      relations: ['product', 'shop'],
+      where: { product, shop },
+    });
+    if (!inventory) {
+      throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
+    }
+    const productInShop: ProductInShop = {
+      ...productOFF,
+      available: inventory.quantity > 0,
+      availableQuantity: inventory.quantity,
+      price: inventory.price,
     };
-    return productInfoDto;
+    return productInShop;
+  }
+
+  async findProductQuantity(product: Product, shop: Shop): Promise<number> {
+    const inventory = await this.inventoryRepository.findOne({
+      relations: ['product', 'shop'],
+      where: { product, shop },
+    });
+    if (!inventory) {
+      throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
+    }
+    return inventory.quantity;
+  }
+
+  async findProductPrice(product: Product, shop: Shop): Promise<number> {
+    const inventory = await this.inventoryRepository.findOne({
+      relations: ['product', 'shop'],
+      where: { product, shop },
+    });
+    if (!inventory) {
+      throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
+    }
+    return inventory.price;
+  }
+
+  async isProductAvailable(product: Product, shop: Shop): Promise<boolean> {
+    const inventory = await this.inventoryRepository.findOne({
+      relations: ['product', 'shop'],
+      where: { product, shop },
+    });
+    if (!product) {
+      throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
+    }
+    return inventory.quantity > 0;
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
