@@ -14,3 +14,12 @@ export const mockShopService = {
   update: jest.fn().mockResolvedValue(mockShop),
   remove: jest.fn().mockResolvedValue(undefined),
 };
+
+export const mockShopRepository = {
+  create: jest.fn().mockReturnValue(mockShop),
+  save: jest.fn().mockResolvedValue(mockShop),
+  find: jest.fn().mockResolvedValue([mockShop]),
+  findOne: jest.fn().mockResolvedValue(mockShop),
+  update: jest.fn().mockResolvedValue(true),
+  delete: jest.fn().mockResolvedValue(true),
+};

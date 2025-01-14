@@ -12,6 +12,8 @@ import { Order } from '../order/entities/order.entity';
 import { Orderline } from '../orderline/entities/orderline.entity';
 import { Shop } from '../shop/entities/shop.entity';
 import { Product } from '../product/entities/product.entity';
+import { User } from '../user/entities/user.entity';
+import { ProductService } from '../product/product.service';
 
 describe('InventoryController', () => {
   let controller: CartController;
@@ -40,6 +42,14 @@ describe('InventoryController', () => {
         {
           provide: getRepositoryToken(Product),
           useValue: mockProductService,
+        },
+        {
+          provide: getRepositoryToken(User),
+          useValue: {},
+        },
+        {
+          provide: ProductService,
+          useValue: {},
         },
       ],
     }).compile();

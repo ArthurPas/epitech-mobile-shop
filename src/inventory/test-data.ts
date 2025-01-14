@@ -6,7 +6,7 @@ export const mockInventory = {
   product_id: '1',
 };
 
-export const mockRepository = {
+export const mockInventoryRepository = {
   create: jest.fn().mockReturnValue(mockInventory),
   save: jest.fn().mockResolvedValue(mockInventory),
   find: jest.fn().mockResolvedValue([mockInventory]),

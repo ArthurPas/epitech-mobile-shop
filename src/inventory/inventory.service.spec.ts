@@ -3,7 +3,7 @@ import { InventoryService } from './inventory.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Inventory } from './entities/inventory.entity';
 import { Repository } from 'typeorm';
-import { mockInventory, mockRepository } from './test-data';
+import { mockInventory, mockInventoryRepository } from './test-data';
 
 describe('InventoryService', () => {
   let service: InventoryService;
@@ -15,7 +15,7 @@ describe('InventoryService', () => {
         InventoryService,
         {
           provide: getRepositoryToken(Inventory),
-          useValue: mockRepository,
+          useValue: mockInventoryRepository,
         },
       ],
     }).compile();
