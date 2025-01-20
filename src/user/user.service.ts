@@ -119,4 +119,8 @@ export class UserService {
   removeUser(id: number): Promise<{ affected?: number }> {
     return this.userRepository.delete(id);
   }
+
+  async getNewUsersOfTheDay(date: Date): Promise<number> {
+    return await this.userRepository.count({ where: { creation_date: date } });
+  }
 }

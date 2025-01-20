@@ -13,7 +13,6 @@ import { OrderlineModule } from './orderline/orderline.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { BillingDetailsModule } from './billing-details/billing-details.module';
 import { CartModule } from './cart/cart.module';
-import { KpiModule } from './kpi/kpi.module';
 
 @Module({
   imports: [
@@ -37,7 +36,7 @@ import { KpiModule } from './kpi/kpi.module';
     OrderlineModule,
     CartModule,
     BillingDetailsModule,
-    KpiModule,
+    CartModule,
   ],
 
   controllers: [AppController],

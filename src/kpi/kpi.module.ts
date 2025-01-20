@@ -1,14 +1,17 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { KpiService } from './kpi.service';
+import { KpiProducts } from './entities/kpiProducts.entity';
+import { OrderService } from 'src/order/order.service';
+import { UserService } from 'src/user/user.service';
 import { Kpi } from './entities/kpi.entity';
 import { KpiController } from './kpi.controller';
-import { KpiService } from './kpi.service';
 import { Product } from 'src/product/entities/product.entity';
-import { KpiProduct } from './entities/kpiProducts.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Kpi, Product, KpiProduct])],
+  imports: [TypeOrmModule.forFeature([Kpi, Product, KpiProducts])],
   controllers: [KpiController],
-  providers: [KpiService],
+  providers: [KpiService, OrderService, UserService],
+  exports: [KpiService],
 })
 export class KpiModule {}

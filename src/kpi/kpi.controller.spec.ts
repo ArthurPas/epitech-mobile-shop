@@ -1,22 +1,29 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CartService } from './cart.service';
+import { CartController } from '../cart/cart.controller';
+import { CartService } from '../cart/cart.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Order } from '../order/entities/order.entity';
 import { Orderline } from '../orderline/entities/orderline.entity';
 import { Shop } from '../shop/entities/shop.entity';
-import { Inventory } from '../inventory/entities/inventory.entity';
 import { Product } from '../product/entities/product.entity';
 import { User } from '../user/entities/user.entity';
 import { ProductService } from '../product/product.service';
-import { KpiService } from '../kpi/kpi.service';
+import { Cart } from '../cart/dto/product-list';
+import { KpiService } from './kpi.service';
+import { Inventory } from '../inventory/entities/inventory.entity';
 
-describe('CartService', () => {
-  let service: CartService;
+describe('KpiController', () => {
+  let controller: CartController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      controllers: [CartController],
       providers: [
         CartService,
+        {
+          provide: getRepositoryToken(Cart),
+          useValue: {},
+        },
         {
           provide: getRepositoryToken(Order),
           useValue: {},
@@ -30,15 +37,15 @@ describe('CartService', () => {
           useValue: {},
         },
         {
-          provide: getRepositoryToken(Inventory),
-          useValue: {},
-        },
-        {
           provide: getRepositoryToken(Product),
           useValue: {},
         },
         {
           provide: getRepositoryToken(User),
+          useValue: {},
+        },
+        {
+          provide: getRepositoryToken(Inventory),
           useValue: {},
         },
         {
@@ -52,10 +59,10 @@ describe('CartService', () => {
       ],
     }).compile();
 
-    service = module.get<CartService>(CartService);
+    controller = module.get<CartController>(CartController);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(controller).toBeDefined();
   });
 });

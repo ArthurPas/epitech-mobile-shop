@@ -5,6 +5,6 @@ export class DateRangeDto {
   @ApiProperty()
   @IsDateString()
   startDate: string;
-  @ApiProperty({ required: false })
+  @ApiProperty()
   endDate?: string;
 }

@@ -1,6 +1,7 @@
 import { Controller, Get, Body } from '@nestjs/common';
 import { KpiService } from './kpi.service';
 import { DateRangeDto } from './dto/dateRange';
+import { KpiResponse } from './dao/KpiReport';
 
 @Controller('kpis')
 export class KpiController {
@@ -9,9 +10,9 @@ export class KpiController {
   @Get() findAll() {
     return this.kpiService.findAll();
   }
-  @Get('/range') findByRange(@Body() dateRangeDto: DateRangeDto) {
-    {
-      return this.kpiService.findByRange(dateRangeDto);
-    }
+  @Get('/range') async findByRange(
+    @Body() dateRangeDto: DateRangeDto,
+  ): Promise<KpiResponse[]> {
+    return this.kpiService.findByRange(dateRangeDto);
   }
 }

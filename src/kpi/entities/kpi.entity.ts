@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { KpiProduct } from './kpiProducts.entity';
+import { KpiProducts } from './kpiProducts.entity';
 
 @Entity()
 export class Kpi {
@@ -10,9 +10,9 @@ export class Kpi {
   @Column({ type: 'int' })
   nb_out_of_stock: number;
 
-  @OneToMany(() => KpiProduct, (products) => products.kpi, {
+  @OneToMany(() => KpiProducts, (products) => products.kpi, {
     nullable: true,
     cascade: true,
   })
-  products: KpiProduct[];
+  products: KpiProducts[];
 }
