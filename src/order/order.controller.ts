@@ -30,6 +30,11 @@ export class OrderController {
     return this.orderService.findOne(id);
   }
 
+  @Post(':id/paypal')
+  async createPaypalOrder(@Param('id') id: number) {
+    return this.orderService.paypalCreation(id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateOrderDto: UpdateOrderDto) {
     return this.orderService.update(id, updateOrderDto);
