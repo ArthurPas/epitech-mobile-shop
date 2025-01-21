@@ -32,7 +32,12 @@ export class OrderController {
 
   @Post(':id/paypal')
   async createPaypalOrder(@Param('id') id: number) {
-    return this.orderService.paypalCreation(id);
+    return this.orderService.createPaypalOrder(id);
+  }
+
+  @Post(':id/paypal/capture')
+  async capturePaypalOrder(@Param('id') id: number) {
+    return this.orderService.capturePaypalOrder(id);
   }
 
   @Patch(':id')
