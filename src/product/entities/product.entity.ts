@@ -1,3 +1,4 @@
+import { KpiProducts } from '../../kpi/entities/kpiProducts.entity';
 import { Inventory } from '../../inventory/entities/inventory.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -13,4 +14,10 @@ export class Product {
     cascade: ['insert', 'update'],
   })
   inventory: Inventory[];
+
+  @OneToMany(() => KpiProducts, (products) => products.product, {
+    nullable: true,
+    cascade: true,
+  })
+  kpis: KpiProducts[];
 }

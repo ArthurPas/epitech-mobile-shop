@@ -41,4 +41,22 @@ export class OrderService {
   async remove(id: number): Promise<void> {
     await this.orderRepository.delete(id);
   }
+
+  async getAverageTimeSpentBeforePay(date: Date): Promise<number> {
+    const orders = await this.orderRepository.find({
+      where: { creation_date: date, is_paid: true },
+      relations: ['orderlines'],
+    });
+
+    if (orders.length === 0) {
+      return 0;
+    }
+    const total = orders.reduce((acc, order) => {
+      const timeSpent =
+        order.creation_date.getTime() - order.payment_date.getTime();
+      return acc + timeSpent;
+    }, 0);
+
+    return total / orders.length;
+  }
 }

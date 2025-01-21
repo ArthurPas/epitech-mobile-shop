@@ -1,12 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CartController } from './cart.controller';
 import { CartService } from './cart.service';
-import { mockInventoryService } from '../inventory/test-data';
-import { mockOrderService } from '../order/test-data';
-import { mockOrderlineService } from '../orderline/test-data';
-import { mockShopService } from '../shop/test-data';
-import { mockProductService } from '../product/test-data';
-import { Inventory } from '../inventory/entities/inventory.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Order } from '../order/entities/order.entity';
 import { Orderline } from '../orderline/entities/orderline.entity';
@@ -14,8 +8,11 @@ import { Shop } from '../shop/entities/shop.entity';
 import { Product } from '../product/entities/product.entity';
 import { User } from '../user/entities/user.entity';
 import { ProductService } from '../product/product.service';
+import { Cart } from './dto/product-list';
+import { KpiService } from '../kpi/kpi.service';
+import { Inventory } from '../inventory/entities/inventory.entity';
 
-describe('InventoryController', () => {
+describe('CartController', () => {
   let controller: CartController;
 
   beforeEach(async () => {
@@ -24,31 +21,39 @@ describe('InventoryController', () => {
       providers: [
         CartService,
         {
-          provide: getRepositoryToken(Inventory),
-          useValue: mockInventoryService,
+          provide: getRepositoryToken(Cart),
+          useValue: {},
         },
         {
           provide: getRepositoryToken(Order),
-          useValue: mockOrderService,
+          useValue: {},
         },
         {
           provide: getRepositoryToken(Orderline),
-          useValue: mockOrderlineService,
+          useValue: {},
         },
         {
           provide: getRepositoryToken(Shop),
-          useValue: mockShopService,
+          useValue: {},
         },
         {
           provide: getRepositoryToken(Product),
-          useValue: mockProductService,
+          useValue: {},
         },
         {
           provide: getRepositoryToken(User),
           useValue: {},
         },
         {
+          provide: getRepositoryToken(Inventory),
+          useValue: {},
+        },
+        {
           provide: ProductService,
+          useValue: {},
+        },
+        {
+          provide: KpiService,
           useValue: {},
         },
       ],
