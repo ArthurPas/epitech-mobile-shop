@@ -3,14 +3,14 @@ import { OrderService } from './order.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
-import { CreateOrderDto } from './dto/create-order.dto';
+// import { CreateOrderDto } from './dto/create-order.dto';
 import { PaypalService } from 'src/paypal/paypal.service';
 // import { UpdateOrderDto } from './dto/update-order.dto';
 
 describe('OrderService', () => {
   let service: OrderService;
   let repository: Repository<Order>;
-  let paypalService: PaypalService;
+  // let paypalService: PaypalService;
 
   const mockOrder = {
     id: 1,
@@ -45,7 +45,7 @@ describe('OrderService', () => {
     }).compile();
 
     service = module.get<OrderService>(OrderService);
-    paypalService = module.get<PaypalService>(PaypalService);
+    // paypalService = module.get<PaypalService>(PaypalService);
     repository = module.get<Repository<Order>>(getRepositoryToken(Order));
   });
 

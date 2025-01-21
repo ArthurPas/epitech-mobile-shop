@@ -6,12 +6,14 @@ import axios from 'axios';
 export class PaypalService {
   private readonly clientId: string;
   private readonly clientSecret: string;
-  // private readonly baseUrl = process.env.PAYPAL_API;
-  private readonly baseUrl = 'https://api-m.sandbox.paypal.com';
+  private readonly baseUrl: string;
 
   constructor(private configService: ConfigService) {
     this.clientId = this.configService.get<string>('PAYPAL_CLIENT_ID');
     this.clientSecret = this.configService.get<string>('PAYPAL_CLIENT_SECRET');
+    this.baseUrl =
+      this.configService.get<string>('PAYPAL_API') ||
+      'https://api-m.sandbox.paypal.com';
 
     if (!this.clientId || !this.clientSecret) {
       throw new Error('PayPal credentials not found in environment variables');
