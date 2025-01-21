@@ -9,6 +9,8 @@ export class Product {
   @Column()
   open_food_fact_id: string;
 
-  @OneToMany(() => Inventory, (inventory) => inventory.product)
+  @OneToMany(() => Inventory, (inventory) => inventory.product, {
+    cascade: ['insert', 'update'],
+  })
   inventory: Inventory[];
 }
