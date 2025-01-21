@@ -31,8 +31,9 @@ describe('ProductController', () => {
   describe('create', () => {
     it('should create a product', async () => {
       const createProductDto: CreateProductDto = {
-        open_food_fact_id: '123456',
-        shopId: 1,
+        openFoodFactId: '123456',
+        quantity: 1,
+        price: 5,
       };
       expect(await controller.create(createProductDto)).toEqual(mockProduct);
       expect(service.create).toHaveBeenCalledWith(createProductDto);
@@ -56,7 +57,9 @@ describe('ProductController', () => {
   describe('update', () => {
     it('should update a product', async () => {
       const updateProductDto: UpdateProductDto = {
-        open_food_fact_id: '654321',
+        openFoodFactId: '123456',
+        quantity: 1,
+        price: 5,
       };
       expect(await controller.update(1, updateProductDto)).toEqual(mockProduct);
       expect(service.update).toHaveBeenCalledWith(1, updateProductDto);

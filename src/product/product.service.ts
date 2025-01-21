@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -22,13 +27,34 @@ export class ProductService {
     private readonly shopRepository: Repository<Shop>,
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
-    const product = this.productRepository.create(createProductDto);
+  async create({ openFoodFactId, quantity, price }: CreateProductDto) {
+    const isProductAlreadyCreated = await this.productRepository.findBy({
+      open_food_fact_id: openFoodFactId,
+    });
+
+    if (isProductAlreadyCreated.length > 1) {
+      throw new HttpException(
+        'Product already in inventory',
+        HttpStatus.CONFLICT,
+      );
+    }
+    const inventory = this.inventoryRepository.create({
+      price,
+      quantity,
+      shop: { id: 1 },
+    });
+
+    const product = this.productRepository.create({
+      open_food_fact_id: openFoodFactId,
+      inventory: [inventory],
+    });
     return this.productRepository.save(product);
   }
 
   async findAll(): Promise<Product[]> {
-    return this.productRepository.find();
+    return this.productRepository.find({
+      relations: ['inventory', 'inventory.shop'],
+    });
   }
 
   async findOne(openFoodFactId: number): Promise<ProductInShop | undefined> {
@@ -113,12 +139,53 @@ export class ProductService {
     return inventory.quantity > 0;
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto) {
-    await this.productRepository.update(id, updateProductDto);
-    return this.productRepository.findOne({ where: { id } });
+  async update(
+    id: number,
+    { quantity, price, openFoodFactId }: UpdateProductDto,
+  ) {
+    const product = await this.productRepository.findOne({
+      where: { id },
+      relations: ['inventory', 'inventory.shop'],
+    });
+
+    if (!product) throw new NotFoundException();
+
+    // Find the specific inventory entry
+    const inventoryItem = product.inventory.find((inv) => inv.shop.id === 1);
+
+    if (inventoryItem) {
+      // Update existing inventory
+      if (price) {
+        inventoryItem.price = price;
+      }
+      if (quantity) {
+        inventoryItem.quantity = quantity;
+      }
+    }
+
+    if (openFoodFactId) {
+      product.open_food_fact_id = openFoodFactId;
+    }
+
+    // Save the changes
+    return this.productRepository.save(product);
   }
 
-  async remove(id: number): Promise<void> {
-    await this.productRepository.delete(id);
+  async remove(id: number): Promise<{ affectedRows: number }> {
+    const presenceInInventories = await this.inventoryRepository.findBy({
+      product: { id },
+    });
+
+    let affectedRows = 0;
+    if (presenceInInventories && presenceInInventories.length > 0) {
+      for (const inventory of presenceInInventories) {
+        const update = await this.inventoryRepository.update(inventory.id, {
+          quantity: 0,
+        });
+
+        affectedRows += update.affected ?? 0;
+      }
+    }
+    return { affectedRows };
   }
 }
