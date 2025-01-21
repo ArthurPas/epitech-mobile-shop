@@ -1,6 +1,12 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { Product } from '../product/entities/product.entity';
 import { Order } from '../order/entities/order.entity';
 import { Orderline } from '../orderline/entities/orderline.entity';
@@ -13,6 +19,7 @@ import { User } from '../user/entities/user.entity';
 import { ProductService } from '../product/product.service';
 import { ProductInShop } from '../product/dto/product-info.dto';
 import { CreateOrderlineDto } from '../orderline/dto/create-orderline.dto';
+import { KpiService } from '../kpi/kpi.service';
 
 @Injectable()
 export class CartService {
@@ -31,6 +38,8 @@ export class CartService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly productService: ProductService,
+    @Inject(forwardRef(() => KpiService))
+    private readonly kpiService: KpiService,
   ) {}
 
   async newOrdelineByNewProduct(
@@ -160,8 +169,11 @@ export class CartService {
     });
     console.log('Inventory before : ' + inventory.quantity);
     inventory.quantity = inventory.quantity + quantity;
-    const inventoryTEST = await this.inventoryRepository.save(inventory);
-    console.log('Inventory after : ' + inventoryTEST.quantity);
+    await this.inventoryRepository.save(inventory);
+    if (inventory.quantity === 0) {
+      console.log('Out of stock');
+      this.kpiService.incrementOutOfStockCount(product, new Date());
+    }
   }
   async updateOrderTotalPrice(order: Order, price: number) {
     const newPrice = Number(order.total_price) + Number(price);
@@ -302,5 +314,26 @@ export class CartService {
   }
   async getInfoProduct(productId: string): Promise<ProductInShop> {
     return await this.productService.findOne(+productId);
+  }
+
+  async getAverageCartPrice(date: Date): Promise<number> {
+    console.log('Getting average cart price');
+    console.log('Type of date:', typeof date);
+    const orders = await this.orderRepository.find({
+      where: {
+        is_paid: true,
+        creation_date: Between(
+          new Date(date.setHours(0, 0, 0, 0)),
+          new Date(date.setHours(23, 59, 59, 999)),
+        ),
+      },
+    });
+    let totalPrice = 0;
+    let totalOrders = 0;
+    for (const order of orders) {
+      totalPrice += order.total_price;
+      totalOrders++;
+    }
+    return totalPrice / totalOrders;
   }
 }

@@ -9,9 +9,17 @@ import { Product } from 'src/product/entities/product.entity';
 import { Shop } from 'src/shop/entities/shop.entity';
 import { User } from 'src/user/entities/user.entity';
 import { ProductService } from 'src/product/product.service';
+import { KpiService } from 'src/kpi/kpi.service';
+import { Kpi } from 'src/kpi/entities/kpi.entity';
+import { KpiProducts } from 'src/kpi/entities/kpiProducts.entity';
+import { OrderService } from 'src/order/order.service';
+import { UserService } from 'src/user/user.service';
+import { KpiController } from 'src/kpi/kpi.controller';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([Kpi]),
+    TypeOrmModule.forFeature([KpiProducts]),
     TypeOrmModule.forFeature([Order]),
     TypeOrmModule.forFeature([Orderline]),
     TypeOrmModule.forFeature([Shop]),
@@ -19,7 +27,15 @@ import { ProductService } from 'src/product/product.service';
     TypeOrmModule.forFeature([Inventory]),
     TypeOrmModule.forFeature([User]),
   ],
-  controllers: [CartController],
-  providers: [CartService, ProductService],
+  controllers: [CartController, KpiController],
+  providers: [
+    CartService,
+    ProductService,
+    KpiService,
+    OrderService,
+    KpiService,
+    UserService,
+  ],
+  exports: [CartService],
 })
 export class CartModule {}

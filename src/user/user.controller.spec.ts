@@ -15,6 +15,7 @@ describe('UserController', () => {
     username: 'johndoe',
     email: 'john@example.com',
     password: 'hashedPassword123',
+    creation_date: new Date(),
   };
 
   const mockUserService = {

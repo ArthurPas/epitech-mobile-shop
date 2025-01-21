@@ -8,6 +8,7 @@ import { Inventory } from '../inventory/entities/inventory.entity';
 import { Product } from '../product/entities/product.entity';
 import { User } from '../user/entities/user.entity';
 import { ProductService } from '../product/product.service';
+import { KpiService } from '../kpi/kpi.service';
 
 describe('CartService', () => {
   let service: CartService;
@@ -42,6 +43,10 @@ describe('CartService', () => {
         },
         {
           provide: ProductService,
+          useValue: {},
+        },
+        {
+          provide: KpiService,
           useValue: {},
         },
       ],
