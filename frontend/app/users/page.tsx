@@ -1,7 +1,5 @@
 import { User, columns, UserRole } from "@/app/users/columns";
 import { DataTable } from "@/app/users/data-table";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 async function getData(): Promise<User[]> {
     return [
@@ -53,10 +51,6 @@ async function getDataMock(): Promise<User[]> {
         users.push(generateRandomUser(i));
     }
     return users;
-}
-
-async function getDataMock1(): Promise<User[]> {
-    return []
 }
 
 export default async function UserPage() {
