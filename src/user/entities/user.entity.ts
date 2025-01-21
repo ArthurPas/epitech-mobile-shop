@@ -12,6 +12,8 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ type: 'date', default: () => 'CURRENT_DATE' })
+  creation_date: Date;
   @Column({ type: 'varchar', length: 30 })
   first_name: string;
 

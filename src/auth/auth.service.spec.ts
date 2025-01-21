@@ -19,6 +19,7 @@ describe('AuthService', () => {
     role: UserRole.USER,
     billing: [],
     order: [],
+    creation_date: new Date(),
   };
 
   const mockUserService = {

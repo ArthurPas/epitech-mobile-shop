@@ -36,6 +36,7 @@ import { CartModule } from './cart/cart.module';
     OrderlineModule,
     CartModule,
     BillingDetailsModule,
+    CartModule,
   ],
 
   controllers: [AppController],

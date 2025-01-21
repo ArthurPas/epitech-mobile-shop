@@ -15,6 +15,7 @@ describe('UserService', () => {
     username: 'johndoe',
     email: 'john@example.com',
     password: 'hashedPassword123',
+    creation_date: new Date(),
   };
 
   const mockRepository = {
