@@ -3,14 +3,16 @@ import { OrderService } from './order.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
-// import { CreateOrderDto } from './dto/create-order.dto';
 import { PaypalService } from '../paypal/paypal.service';
-// import { UpdateOrderDto } from './dto/update-order.dto';
+import { UpdateOrderDto } from 'src/order/dto/update-order.dto';
+import { CreateOrderDto } from 'src/order/dto/create-order.dto';
+import { ConfigService } from '@nestjs/config';
 
 describe('OrderService', () => {
   let service: OrderService;
   let repository: Repository<Order>;
-  // let paypalService: PaypalService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  let paypalService: PaypalService;
 
   const mockOrder = {
     id: 1,
@@ -20,6 +22,17 @@ describe('OrderService', () => {
     is_paid: true,
     userId: 1,
     billingId: 1,
+  };
+
+  const mockPaypalService = {
+    createPaypalOrder: jest.fn().mockResolvedValue({
+      id: 'MOCK_PAYPAL_ID',
+      status: 'CREATED',
+    }),
+    capturePaypalOrder: jest.fn().mockResolvedValue({
+      id: 'MOCK_PAYPAL_ID',
+      status: 'COMPLETED',
+    }),
   };
 
   const mockRepository = {
@@ -36,7 +49,20 @@ describe('OrderService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         OrderService,
-        PaypalService,
+        {
+          provide: PaypalService,
+          useValue: mockPaypalService,
+        },
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn((key: string) => {
+              if (key === 'PAYPAL_CLIENT_ID') return 'mockClientId';
+              if (key === 'PAYPAL_CLIENT_SECRET') return 'mockClientSecret';
+              return null;
+            }),
+          },
+        },
         {
           provide: getRepositoryToken(Order),
           useValue: mockRepository,
@@ -45,7 +71,7 @@ describe('OrderService', () => {
     }).compile();
 
     service = module.get<OrderService>(OrderService);
-    // paypalService = module.get<PaypalService>(PaypalService);
+    paypalService = module.get<PaypalService>(PaypalService);
     repository = module.get<Repository<Order>>(getRepositoryToken(Order));
   });
 
@@ -53,51 +79,51 @@ describe('OrderService', () => {
     expect(service).toBeDefined();
   });
 
-  // describe('create', () => {
-  //   it('should create an order', async () => {
-  //     const createOrderDto: CreateOrderDto = {
-  //       total_price: 99.99,
-  //       creation_date: new Date('2024-03-20'),
-  //       payment_date: new Date('2024-03-20'),
-  //       is_paid: true,
-  //       userId: 1,
-  //       billingId: 1,
-  //     };
-  //     expect(await service.create(createOrderDto)).toEqual(mockOrder);
-  //     expect(repository.create).toHaveBeenCalledWith(createOrderDto);
-  //     expect(repository.save).toHaveBeenCalled();
-  //   });
-  // });
+  describe('create', () => {
+    it('should create an order', async () => {
+      const createOrderDto: CreateOrderDto = {
+        total_price: 99.99,
+        creation_date: new Date('2024-03-20'),
+        payment_date: new Date('2024-03-20'),
+        is_paid: true,
+        userId: 1,
+        billingId: 1,
+      };
+      expect(await service.create(createOrderDto)).toEqual(mockOrder);
+      expect(repository.create).toHaveBeenCalledWith(createOrderDto);
+      expect(repository.save).toHaveBeenCalled();
+    });
+  });
 
-  // describe('findAll', () => {
-  //   it('should return array of orders', async () => {
-  //     expect(await service.findAll()).toEqual([mockOrder]);
-  //     expect(repository.find).toHaveBeenCalled();
-  //   });
-  // });
+  describe('findAll', () => {
+    it('should return array of orders', async () => {
+      expect(await service.findAll()).toEqual([mockOrder]);
+      expect(repository.find).toHaveBeenCalled();
+    });
+  });
 
-  // describe('findOne', () => {
-  //   it('should return a single order', async () => {
-  //     expect(await service.findOne(1)).toEqual(mockOrder);
-  //     expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
-  //   });
+  describe('findOne', () => {
+    it('should return a single order', async () => {
+      expect(await service.findOne(1)).toEqual(mockOrder);
+      expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
+    });
 
-  //   it('should handle order not found', async () => {
-  //     jest.spyOn(repository, 'findOne').mockResolvedValue(null);
-  //     await expect(service.findOne(999)).rejects.toThrow('Order not found');
-  //   });
-  // });
+    it('should handle order not found', async () => {
+      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+      await expect(service.findOne(999)).rejects.toThrow('Order not found');
+    });
+  });
 
-  // describe('update', () => {
-  //   it('should update an order', async () => {
-  //     const updateOrderDto: UpdateOrderDto = {
-  //       is_paid: true,
-  //       payment_date: new Date('2024-03-21'),
-  //     };
-  //     expect(await service.update(1, updateOrderDto)).toEqual(mockOrder);
-  //     expect(repository.update).toHaveBeenCalledWith(1, updateOrderDto);
-  //   });
-  // });
+  describe('update', () => {
+    it('should update an order', async () => {
+      const updateOrderDto: UpdateOrderDto = {
+        is_paid: true,
+        payment_date: new Date('2024-03-21'),
+      };
+      expect(await service.update(1, updateOrderDto)).toEqual(mockOrder);
+      expect(repository.update).toHaveBeenCalledWith(1, updateOrderDto);
+    });
+  });
 
   describe('remove', () => {
     it('should remove an order', async () => {
