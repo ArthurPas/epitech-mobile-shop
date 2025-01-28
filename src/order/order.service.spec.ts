@@ -4,7 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
 // import { CreateOrderDto } from './dto/create-order.dto';
-import { PaypalService } from 'src/paypal/paypal.service';
+import { PaypalService } from '../paypal/paypal.service';
 // import { UpdateOrderDto } from './dto/update-order.dto';
 
 describe('OrderService', () => {

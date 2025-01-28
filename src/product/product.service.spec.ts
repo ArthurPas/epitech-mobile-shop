@@ -39,6 +39,7 @@ describe('ProductService', () => {
     save: jest.fn().mockResolvedValue(mockProduct),
     update: jest.fn().mockResolvedValue(true),
     delete: jest.fn().mockResolvedValue(true),
+    findAndCount: jest.fn().mockResolvedValue([[mockProduct], 10]),
   };
 
   beforeEach(async () => {
@@ -76,7 +77,7 @@ describe('ProductService', () => {
 
   describe('findAll', () => {
     it('should return an array of products', async () => {
-      expect(await service.findAll()).toEqual([mockProduct]);
+      expect(await service.findAll(10, 0)).toEqual([[mockProduct], 10]);
     });
   });
 

@@ -51,9 +51,11 @@ export class ProductService {
     return this.productRepository.save(product);
   }
 
-  async findAll(): Promise<Product[]> {
-    return this.productRepository.find({
+  async findAll(take: number, skip: number): Promise<[Product[], number]> {
+    return this.productRepository.findAndCount({
       relations: ['inventory', 'inventory.shop'],
+      take,
+      skip,
     });
   }
 
@@ -168,7 +170,7 @@ export class ProductService {
     }
 
     // Save the changes
-    return this.productRepository.save(product);
+    return this.productRepository.save(product, { reload: false });
   }
 
   async remove(id: number): Promise<{ affectedRows: number }> {

@@ -42,7 +42,7 @@ describe('ProductController', () => {
 
   describe('findAll', () => {
     it('should return array of products', async () => {
-      expect(await controller.findAll()).toEqual([mockProduct]);
+      expect(await controller.findAll(0, 10)).toEqual([mockProduct]);
       expect(service.findAll).toHaveBeenCalled();
     });
   });
