@@ -12,6 +12,13 @@ export const postLogin = async ({ username, password }: postLoginParam) => {
   });
 };
 
+export const postLogout = () => {
+  return apiClient({
+    method: "post",
+    url: `/auth/logout`,
+  });
+};
+
 export const getUsers = async () => {
   return await apiClient({
     method: "get",

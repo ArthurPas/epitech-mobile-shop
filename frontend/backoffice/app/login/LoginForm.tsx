@@ -19,46 +19,48 @@ export function LoginForm() {
       .then((res) => {
         token.setToken(jwtConstants.key, res.data.access_token);
         router.push("/");
+        router.refresh();
       })
       .catch((err) => {
         console.error(err);
       });
   };
   return (
-    <form onSubmit={onLogin}>
-      <fieldset className="form-group">
-        <input
-          className="form-control form-control-lg"
-          type="text"
-          placeholder="Username"
-          name="username"
-          value={signIndata.username}
-          onChange={(e) =>
-            onChangeSignInData((values) => ({
-              ...values,
-              [e.target.name]: e.target.value,
-            }))
-          }
-        />
+    <form onSubmit={onLogin} className="w-full max-w-sm mx-auto mt-8 p-4 bg-white shadow-md rounded">
+      <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
+      <fieldset className="mb-4">
+      <input
+      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+      type="text"
+      placeholder="Username"
+      name="username"
+      value={signIndata.username}
+      onChange={(e) =>
+      onChangeSignInData((values) => ({
+        ...values,
+        [e.target.name]: e.target.value,
+      }))
+      }
+      />
       </fieldset>
-      <fieldset className="form-group">
-        <input
-          className="form-control form-control-lg"
-          type="password"
-          placeholder="Password"
-          autoComplete="off"
-          name="password"
-          value={signIndata.password}
-          onChange={(e) =>
-            onChangeSignInData((values) => ({
-              ...values,
-              [e.target.name]: e.target.value,
-            }))
-          }
-        />
+      <fieldset className="mb-4">
+      <input
+      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+      type="password"
+      placeholder="Password"
+      autoComplete="off"
+      name="password"
+      value={signIndata.password}
+      onChange={(e) =>
+      onChangeSignInData((values) => ({
+        ...values,
+        [e.target.name]: e.target.value,
+      }))
+      }
+      />
       </fieldset>
-      <button type="submit" className="btn btn-lg btn-primary pull-xs-right">
-        Log in
+      <button type="submit" className="w-full py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+      Log in
       </button>
     </form>
   );
