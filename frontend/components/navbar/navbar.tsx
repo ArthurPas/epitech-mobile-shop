@@ -1,14 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import {
-    Menubar,
-    MenubarContent,
-    MenubarItem,
-    MenubarMenu,
-    MenubarSeparator,
-    MenubarShortcut,
-    MenubarTrigger,
-} from "@/components/ui/menubar";
 import { Button } from "@/components/ui/button";
 
 function Navbar() {
@@ -48,9 +39,6 @@ function Navbar() {
                 <div className="flex space-x-4">
                     <Link href="/login">
                         <Button variant="outline">Login</Button>
-                    </Link>
-                    <Link href="/register">
-                        <Button variant="outline">Register</Button>
                     </Link>
                 </div>
             </nav>

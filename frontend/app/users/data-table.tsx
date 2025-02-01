@@ -1,5 +1,4 @@
-"use client";
-
+import React from "react";
 import {
     ColumnDef,
     flexRender,
@@ -9,7 +8,6 @@ import {
     ColumnFiltersState,
     getFilteredRowModel,
 } from "@tanstack/react-table";
-
 import {
     Table,
     TableBody,
@@ -20,21 +18,22 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React from "react";
 import CreateUserButton from "./create-user";
+import { useDeleteUser } from "@/lib/queries/users";
+import EditUserButton from "./edit-user";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends { id: number }, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([]);
-    const [rowSelection, setRowSelection] = React.useState({})
+    const [rowSelection, setRowSelection] = React.useState({});
 
     const table = useReactTable({
         data,
@@ -60,7 +59,12 @@ export function DataTable<TData, TValue>({
     );
 
     const isAnyRowSelected = Object.keys(rowSelection).length > 0;
-    const isOneRowSelected = Object.keys(rowSelection).length == 1;
+
+    const { mutateAsync: deleteUser } = useDeleteUser();
+
+    // Get the selected row's user ID
+    const selectedRowIndex = Object.keys(rowSelection)[0];
+    const selectedUserId = selectedRowIndex ? data[parseInt(selectedRowIndex, 10)].id : null;
 
     return (
         <div>
@@ -82,21 +86,39 @@ export function DataTable<TData, TValue>({
                     />
                 </div>
                 <div className="flex items-center space-x-2 ml-auto">
-                    <Button variant="outline" disabled={!isOneRowSelected}>Edit</Button>
-                    <Button variant="outline" disabled={!isAnyRowSelected}>Delete</Button>
+                    <Button
+                        variant="outline"
+                        disabled={!isAnyRowSelected}
+                        onClick={() => {
+                            if (selectedUserId !== null) {
+                                deleteUser(selectedUserId);
+                            }
+                        }}
+                    >
+                        Delete
+                    </Button>
+                    <EditUserButton userID={selectedUserId!} />
                     <CreateUserButton />
                 </div>
             </div>
 
-            <div className="rounded-md border w-full max-w-7xl"> 
+            <div className="rounded-md border w-full max-w-7xl">
                 <Table className="table-fixed w-full">
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
-                                    const isEmailColumn = header.column.id === "email";
+                                    const isEmailColumn =
+                                        header.column.id === "email";
                                     return (
-                                        <TableHead key={header.id} className={isEmailColumn ? "w-1/2" : "w-1/4"}>
+                                        <TableHead
+                                            key={header.id}
+                                            className={
+                                                isEmailColumn
+                                                    ? "w-1/2"
+                                                    : "w-1/4"
+                                            }
+                                        >
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -120,9 +142,17 @@ export function DataTable<TData, TValue>({
                                     }
                                 >
                                     {row.getVisibleCells().map((cell) => {
-                                        const isEmailColumn = cell.column.id === "email";
+                                        const isEmailColumn =
+                                            cell.column.id === "email";
                                         return (
-                                            <TableCell key={cell.id} className={isEmailColumn ? "w-1/2" : "w-1/4"}>
+                                            <TableCell
+                                                key={cell.id}
+                                                className={
+                                                    isEmailColumn
+                                                        ? "w-1/2"
+                                                        : "w-1/4"
+                                                }
+                                            >
                                                 {flexRender(
                                                     cell.column.columnDef.cell,
                                                     cell.getContext()

@@ -10,6 +10,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useCreateUser } from "@/lib/queries/users";
 import { useForm } from "react-hook-form";
 
 export default function CreateUserButton() {
@@ -17,7 +18,10 @@ export default function CreateUserButton() {
 
     const onSubmit = (data: any) => {
         console.log(data);
+        createUser(data);
     };
+
+    const { mutateAsync: createUser } = useCreateUser();
 
     return (
         <div>
