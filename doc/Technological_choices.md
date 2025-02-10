@@ -12,7 +12,7 @@ Nous avons choisi [NestJS](https://nestjs.com/) pour notre API, il s'agit d'un f
 
 ## App web
 
-[React](https://react.dev/) pour le web en Single Page Application, que nous avons utilisé sans meta-framework car notre back-office n'a pas besoin de besoin particulier de SEO ni de SSR, cela nous permet d'avoir une app au plus légère possible qui chargera rapidement.
+[React](https://react.dev/) pour le web en Single Page Application, que nous avons utilisé sans meta-framework car notre back-office n'a pas besoin de besoin particulier de SEO ni de SSR, cela nous permet d'avoir une app légère qui chargera rapidement.
 
 Pour illustrer cela, se réferer au schéma d'architecure ci-dessous :
 
