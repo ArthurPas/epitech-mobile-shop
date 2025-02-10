@@ -3,7 +3,7 @@ import { OrderService } from './order.service';
 import { OrderController } from './order.controller';
 import { Order } from '../order/entities/order.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PaypalService } from 'src/paypal/paypal.service';
+import { PaypalService } from '../paypal/paypal.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Order])],

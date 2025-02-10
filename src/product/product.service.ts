@@ -26,7 +26,9 @@ export class ProductService {
     @InjectRepository(Shop)
     private readonly shopRepository: Repository<Shop>,
   ) {}
-
+  countProducts() {
+    return this.productRepository.count();
+  }
   async create({ openFoodFactId, quantity, price }: CreateProductDto) {
     const isProductAlreadyCreated = await this.productRepository.findBy({
       open_food_fact_id: openFoodFactId,

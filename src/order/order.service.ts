@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
@@ -110,8 +110,13 @@ export class OrderService {
   }
 
   async getAverageTimeSpentBeforePay(date: Date): Promise<number> {
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+
     const orders = await this.orderRepository.find({
-      where: { creation_date: date, is_paid: true },
+      where: { creation_date: Between(startOfDay, endOfDay), is_paid: true },
       relations: ['orderlines'],
     });
 
@@ -120,7 +125,7 @@ export class OrderService {
     }
     const total = orders.reduce((acc, order) => {
       const timeSpent =
-        order.creation_date.getTime() - order.payment_date.getTime();
+        order.payment_date.getTime() - order.creation_date.getTime();
       return acc + timeSpent;
     }, 0);
 

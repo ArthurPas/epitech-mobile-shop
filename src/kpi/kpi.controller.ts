@@ -1,4 +1,4 @@
-import { Controller, Get, Body } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { KpiService } from './kpi.service';
 import { DateRangeDto } from './dto/dateRange';
 import { KpiResponse } from './dao/KpiReport';
@@ -11,8 +11,15 @@ export class KpiController {
     return this.kpiService.findAll();
   }
   @Get('/range') async findByRange(
-    @Body() dateRangeDto: DateRangeDto,
+    @Query('startDate') startDate: DateRangeDto['startDate'],
+    @Query('endDate') endDate: DateRangeDto['endDate'],
   ): Promise<KpiResponse[]> {
-    return this.kpiService.findByRange(dateRangeDto);
+    return this.kpiService.findByRange({ startDate, endDate });
+  }
+  @Get('/counts') async count(): Promise<{
+    totalUsers: number;
+    totalProducts: number;
+  }> {
+    return this.kpiService.counts();
   }
 }
