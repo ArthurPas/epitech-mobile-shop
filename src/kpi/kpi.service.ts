@@ -9,6 +9,7 @@ import { CartService } from '../cart/cart.service';
 import { OrderService } from '../order/order.service';
 import { UserService } from '../user/user.service';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ProductService } from '../product/product.service';
 
 @Injectable()
 export class KpiService {
@@ -19,6 +20,7 @@ export class KpiService {
     private readonly kpiProductRepo: Repository<KpiProducts>,
     private readonly orderService: OrderService,
     private readonly userService: UserService,
+    private readonly productService: ProductService,
     @Inject(forwardRef(() => CartService))
     private readonly cartService: CartService,
   ) {}
@@ -39,7 +41,6 @@ export class KpiService {
 
   async findAll() {
     const kpis = await this.kpiRepository.find({ relations: ['products'] });
-    console.log(kpis);
     return this.makeKpiResponse(kpis);
   }
   async findByDate(date: Date) {
@@ -81,6 +82,16 @@ export class KpiService {
   async newUserOfTheDay(kpi: Kpi): Promise<number> {
     const date = new Date(kpi.date);
     return await this.userService.getNewUsersOfTheDay(date);
+  }
+
+  async counts() {
+    const totalUsers = await this.userService.countUsers();
+    const totalProducts = await this.productService.countProducts();
+
+    return {
+      totalUsers,
+      totalProducts,
+    };
   }
 
   async incrementOutOfStockCount(product: Product, date: Date) {

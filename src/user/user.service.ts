@@ -120,6 +120,10 @@ export class UserService {
     return this.userRepository.delete(id);
   }
 
+  countUsers() {
+    return this.userRepository.count();
+  }
+
   async getNewUsersOfTheDay(date: Date): Promise<number> {
     return await this.userRepository.count({ where: { creation_date: date } });
   }

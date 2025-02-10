@@ -9,8 +9,8 @@ export class PaypalService {
   private readonly baseUrl: string;
 
   constructor(private configService: ConfigService) {
-    this.clientId = this.configService.get<string>('PAYPAL_CLIENT_ID');
-    this.clientSecret = this.configService.get<string>('PAYPAL_CLIENT_SECRET');
+    this.clientId = process.env.PAYPAL_CLIENT_ID;
+    this.clientSecret = process.env.PAYPAL_CLIENT_SECRET;
     this.baseUrl =
       this.configService.get<string>('PAYPAL_API') ||
       'https://api-m.sandbox.paypal.com';

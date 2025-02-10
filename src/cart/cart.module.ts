@@ -15,6 +15,7 @@ import { KpiProducts } from 'src/kpi/entities/kpiProducts.entity';
 import { OrderService } from 'src/order/order.service';
 import { UserService } from 'src/user/user.service';
 import { KpiController } from 'src/kpi/kpi.controller';
+import { PaypalService } from 'src/paypal/paypal.service';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { KpiController } from 'src/kpi/kpi.controller';
     OrderService,
     KpiService,
     UserService,
+    PaypalService,
   ],
   exports: [CartService],
 })

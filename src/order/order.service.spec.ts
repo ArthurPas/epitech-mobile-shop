@@ -31,15 +31,22 @@ describe('OrderService', () => {
     update: jest.fn().mockResolvedValue(mockOrder),
     delete: jest.fn().mockResolvedValue({ affected: 1 }),
   };
+  const mockRepositoryPaypal = {
+    createPaypalOrder: jest.fn().mockResolvedValue({}),
+    capturePaypalOrder: jest.fn().mockResolvedValue({}),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         OrderService,
-        PaypalService,
         {
           provide: getRepositoryToken(Order),
           useValue: mockRepository,
+        },
+        {
+          provide: PaypalService,
+          useValue: mockRepositoryPaypal,
         },
       ],
     }).compile();

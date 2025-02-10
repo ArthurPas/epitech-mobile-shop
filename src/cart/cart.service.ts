@@ -317,8 +317,6 @@ export class CartService {
   }
 
   async getAverageCartPrice(date: Date): Promise<number> {
-    console.log('Getting average cart price');
-    console.log('Type of date:', typeof date);
     const orders = await this.orderRepository.find({
       where: {
         is_paid: true,
@@ -328,12 +326,13 @@ export class CartService {
         ),
       },
     });
+
     let totalPrice = 0;
     let totalOrders = 0;
     for (const order of orders) {
-      totalPrice += order.total_price;
+      totalPrice += Number(order.total_price);
       totalOrders++;
     }
-    return totalPrice / totalOrders;
+    return Number((totalPrice / totalOrders).toFixed(2));
   }
 }
