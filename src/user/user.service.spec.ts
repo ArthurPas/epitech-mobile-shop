@@ -22,6 +22,7 @@ describe('UserService', () => {
     create: jest.fn().mockReturnValue(mockUser),
     save: jest.fn().mockResolvedValue(mockUser),
     find: jest.fn().mockResolvedValue([mockUser]),
+    findAndCount: jest.fn().mockResolvedValue([[mockUser], 1]),
     findOne: jest.fn().mockResolvedValue(mockUser),
     findOneBy: jest.fn().mockResolvedValue(mockUser),
     update: jest.fn().mockResolvedValue({ affected: 1 }),
@@ -62,7 +63,7 @@ describe('UserService', () => {
 
   describe('findAllUser', () => {
     it('should return array of users', async () => {
-      expect(await service.findAllUser()).toEqual([mockUser]);
+      expect(await service.findAllUser(1, 0)).toEqual([[mockUser], 1]);
     });
   });
 

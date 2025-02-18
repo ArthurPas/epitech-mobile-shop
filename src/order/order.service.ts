@@ -87,6 +87,9 @@ export class OrderService {
   async findAll(): Promise<Order[]> {
     return this.orderRepository.find();
   }
+  async findAllbyUser(id: number): Promise<Order[]> {
+    return this.orderRepository.findBy({ user: { id: id }, is_paid: true });
+  }
 
   async findOne(id: number): Promise<Order | undefined> {
     const order = await this.orderRepository.findOne({ where: { id } });

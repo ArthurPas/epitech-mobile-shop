@@ -50,8 +50,11 @@ export class UserService {
    * this function is used to get all the user's list
    * @returns promise of array of users
    */
-  findAllUser(): Promise<User[]> {
-    return this.userRepository.find();
+  findAllUser(take: number, skip: number): Promise<[User[], number]> {
+    return this.userRepository.findAndCount({
+      take,
+      skip,
+    });
   }
 
   /**

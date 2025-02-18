@@ -288,14 +288,14 @@ export class CartService {
   async getCart(userId: number): Promise<CartResponseDao> {
     const cart = new CartResponseDao();
     cart.products = [];
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
-    });
-    console.log('User : ' + JSON.stringify(user));
     const order = await this.orderRepository.findOne({
       relations: ['orderlines'],
-      where: { user: user, is_paid: false },
+      where: { user: { id: userId }, is_paid: false },
     });
+
+    if (!order) {
+      return null;
+    }
     console.log('Order 4: ' + JSON.stringify(order));
     cart.userId = Number(userId);
     cart.orderId = order.id;
@@ -308,7 +308,12 @@ export class CartService {
       const productInfos = await this.getInfoProduct(
         orderline.product.open_food_fact_id,
       );
-      cart.products.push(productInfos);
+      const productStorageInfos = {
+        selectedQuantity: orderline.quantity,
+        priceAtOrder: orderline.price_at_order,
+      };
+
+      cart.products.push({ ...productInfos, ...productStorageInfos });
     }
     return cart;
   }

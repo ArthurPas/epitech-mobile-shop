@@ -44,10 +44,10 @@ describe('OrderController', () => {
     });
   });
 
-  describe('findAll', () => {
+  describe('findAllByUser', () => {
     it('should return array of orders', async () => {
-      expect(await controller.findAll()).toEqual([mockOrder]);
-      expect(service.findAll).toHaveBeenCalled();
+      expect(await controller.findAllByUser(1)).toEqual([mockOrder]);
+      expect(service.findAllbyUser).toHaveBeenCalled();
     });
   });
 

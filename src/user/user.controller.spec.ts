@@ -20,7 +20,7 @@ describe('UserController', () => {
 
   const mockUserService = {
     createUser: jest.fn().mockResolvedValue(mockUser),
-    findAllUser: jest.fn().mockResolvedValue([mockUser]),
+    findAllUser: jest.fn().mockResolvedValue([[mockUser], 1]),
     viewUser: jest.fn().mockResolvedValue(mockUser),
     updateUser: jest.fn().mockResolvedValue(mockUser),
     removeUser: jest.fn().mockResolvedValue(undefined),
@@ -61,7 +61,7 @@ describe('UserController', () => {
 
   describe('findAll', () => {
     it('should return array of users', async () => {
-      expect(await controller.findAll()).toEqual([mockUser]);
+      expect(await controller.findAll(1, 0)).toEqual([[mockUser], 1]);
       expect(service.findAllUser).toHaveBeenCalled();
     });
   });

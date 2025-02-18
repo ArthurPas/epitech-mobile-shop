@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   Controller,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -23,8 +24,8 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAllUser();
+  findAll(@Query('skip') skip: number, @Query('take') take: number) {
+    return this.userService.findAllUser(take, skip);
   }
 
   @Get(':id')
