@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -20,14 +21,18 @@ export class OrderController {
     return this.orderService.create(createOrderDto);
   }
 
-  @Get()
-  findAll() {
-    return this.orderService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.orderService.findAll();
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.orderService.findOne(id);
+  }
+  @Get()
+  findAllByUser(@Query('userId') userId: number) {
+    return this.orderService.findAllbyUser(userId);
   }
 
   @Post(':id/paypal')

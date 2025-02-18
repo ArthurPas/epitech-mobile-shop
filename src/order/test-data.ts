@@ -10,7 +10,7 @@ export const mockOrder = {
 
 export const mockOrderService = {
   create: jest.fn().mockResolvedValue(mockOrder),
-  findAll: jest.fn().mockResolvedValue([mockOrder]),
+  findAllbyUser: jest.fn().mockResolvedValue([mockOrder]),
   findOne: jest.fn().mockResolvedValue(mockOrder),
   update: jest.fn().mockResolvedValue(mockOrder),
   remove: jest.fn().mockResolvedValue(undefined),
