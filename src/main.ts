@@ -19,6 +19,9 @@ async function bootstrap() {
     'http://localhost:3000',
     'http://localhost:8080',
     'http://localhost:3002',
+    'http://209.38.247.123:3000',
+    'http://209.38.247.123:8080',
+    'http://209.38.247.123:3002',
   ];
   app.enableCors({
     origin: (origin, callback) => {
