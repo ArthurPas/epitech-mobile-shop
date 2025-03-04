@@ -22,6 +22,7 @@ async function bootstrap() {
     'http://209.38.247.123:3000',
     'http://209.38.247.123:8080',
     'http://209.38.247.123:3002',
+    'https://trinity-backoffice-9nltzy208-andydcks-projects.vercel.app'
   ];
   app.enableCors({
     origin: (origin, callback) => {

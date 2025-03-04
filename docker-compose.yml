@@ -23,7 +23,7 @@ services:
       - POSTGRES_PASSWORD=${PG_PASSWORD}
       - POSTGRES_DB=${PG_DB}
     volumes:
-    - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
@@ -35,10 +35,12 @@ services:
   app:
     build:
       context: ./backend
-      dockerfile: ${DOCKERFILE}
+      dockerfile: Dockerfile.dev # à mettre en variable
     container_name: nest
     ports:
       - "3000:3000"
+    env_file:
+      - backend/.env.local
     environment:
       - NODE_ENV=${NODE_ENV}
       - JWT_SECRET=${JWT_SECRET}
@@ -53,7 +55,7 @@ services:
   mobile:
     build:
       context: ./mobile
-      dockerfile: ${DOCKERFILE}
+      dockerfile: Dockerfile.dev # à mettre en variable
     container_name: mobile
     ports:
       - "19000:19000" # Pour le packager Expo
@@ -71,7 +73,7 @@ services:
   backoffice:
     build:
       context: ./frontend/backoffice
-      dockerfile: ${DOCKERFILE}
+      dockerfile: Dockerfile.dev # à mettre en variable
     container_name: backoffice
     ports:
       - "3003:3000"
@@ -89,7 +91,7 @@ services:
   frontoffice:
     build:
       context: ./frontend/frontoffice
-      dockerfile: ${DOCKERFILE}
+      dockerfile: Dockerfile.dev # à mettre en variable
     container_name: frontoffice
     ports:
       - "3002:3000"
