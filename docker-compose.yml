@@ -39,59 +39,23 @@ services:
         condition: service_healthy
     restart: always
 
-  mobile:
-    build:
-      context: ./mobile
-      dockerfile: ${DOCKERFILE}
-    container_name: mobile
-    ports:
-      - "19000:19000" # Pour le packager Expo
-      - "19001:19001" # Pour le packager Metro
-      - "19002:19002" # Pour l'interface web Expo
-    environment:
-      - REACT_NATIVE_PACKAGER_HOSTNAME=0.0.0.0
-    volumes:
-      - ${PWD}/mobile/trinity:/app
-      - /app/node_modules
-    command: npx expo start --tunnel
-    networks:
-      - default
-
-  backoffice:
-    build:
-      context: ./frontend/backoffice
-      dockerfile: ${DOCKERFILE}
-    container_name: backoffice
-    ports:
-      - "3003:3000"
-    volumes:
-      - ${PWD}/frontend/backoffice:/app
-      - /app/node_modules
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-      - FAST_REFRESH=true
-    depends_on:
-      db:
-        condition: service_healthy
-    restart: always
-
-  frontoffice:
-    build:
-      context: ./frontend/frontoffice
-      dockerfile: ${DOCKERFILE}
-    container_name: frontoffice
-    ports:
-      - "3002:3000"
-    volumes:
-      - ${PWD}/frontend/frontoffice:/app
-      - /app/node_modules
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-      - FAST_REFRESH=true
-    depends_on:
-      db:
-        condition: service_healthy
-    restart: always
+#  mobile:
+#    build:
+#      context: ./mobile
+#      dockerfile: ${DOCKERFILE}
+#    container_name: mobile
+#    ports:
+#      - "19000:19000" # Pour le packager Expo
+#      - "19001:19001" # Pour le packager Metro
+#      - "19002:19002" # Pour l'interface web Expo
+#    environment:
+#      - REACT_NATIVE_PACKAGER_HOSTNAME=0.0.0.0
+#    volumes:
+#      - ${PWD}/mobile/trinity:/app
+#      - /app/node_modules
+#    command: npx expo start --tunnel
+#    networks:
+#      - default
 
   prometheus:
     container_name: prometheus
